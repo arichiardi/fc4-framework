@@ -60,11 +60,11 @@
       transform="translate(725,50)"
       style="cursor: move !important">
       <g class="structurizrElement" id="v-44">
-        <rect class="structurizrPersonBody structurizrHighlightableElement" x="0" y="140" width="350" height="210" rx="70" id="v-46" stroke="#2079c6" stroke-width="2" pointer-events="visiblePainted" fill="#2486dc"></rect>
-        <circle class="structurizrPersonHead structurizrHighlightableElement" cx="175" cy="77.77777777777777" r="77.77777777777777" id="v-45" stroke="#2079c6" stroke-width="2" pointer-events="visiblePainted" fill="#2486dc"></circle>
-        <line class="structurizrPersonRightArm" x1="70" y1="233.33333333333334" x2="70" y2="350" style="stroke-width:2px" id="v-52" stroke="#2079c6"></line>
-        <line class="structurizrPersonLeftArm" x1="280" y1="233.33333333333334" x2="280" y2="350" style="stroke-width:2px" id="v-53" stroke="#2079c6"></line>
-        <text class="structurizrName" id="v-47" font-size="36px" y="0.8em" font-weight="bold" text-anchor="middle" pointer-events="visible" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,175,175)">
+        <rect class="structurizrPersonBody structurizrHighlightableElement" x="0" y="40" width="350" height="210" rx="70" id="v-46" stroke="#2079c6" stroke-width="2" pointer-events="visiblePainted" fill="#2486dc"></rect>
+        <circle class="structurizrPersonHead structurizrHighlightableElement" cx="175" cy="0" r="77.77777777777777" id="v-45" stroke="#2079c6" stroke-width="2" pointer-events="visiblePainted" fill="#2486dc"></circle>
+        <line class="structurizrPersonRightArm" x1="70" y1="233.33333333333334" x2="70" y2="250" style="stroke-width:2px" id="v-52" stroke="#2079c6"></line>
+        <line class="structurizrPersonLeftArm" x1="280" y1="233.33333333333334" x2="280" y2="250" style="stroke-width:2px" id="v-53" stroke="#2079c6"></line>
+        <text class="structurizrName" id="v-47" font-size="36px" y="0.8em" font-weight="bold" text-anchor="middle" pointer-events="visible" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,175,100)">
           <tspan id="v-54" class="v-line" dy="0em" x="0">Software Creator</tspan>
           <tspan id="v-55" class="v-line" dy="1.2em" x="0">or Documentarian</tspan>
         </text>
