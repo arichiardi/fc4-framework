@@ -17,21 +17,21 @@
           id="v-178"
           font-size="22px"
           y="0.8em"
-          xml:space="preserve"
+
           font-weight="normal"
           text-anchor="start"
           fill="#777777"
           pointer-events="none"
           font-family="Open Sans"
           transform="matrix(1,0,0,1,0,0)">
-          <tspan id="v-179" class="v-line" dy="0em" x="0">https://fundingcircle.github.io/fc4-framework/&nbsp;•&nbsp;last&nbsp;edited&nbsp;2019-09-18&nbsp;by&nbsp;Avi&nbsp;Flax&nbsp;(avi.flax@fundingcircle.com)&nbsp;|&nbsp;Our&nbsp;paid&nbsp;plans&nbsp;designed&nbsp;for&nbsp;teams&nbsp;start&nbsp;from&nbsp;$15&nbsp;per&nbsp;month&nbsp;-&nbsp;structurizr.com</tspan>
+          <tspan id="v-179" class="v-line" dy="0em" x="0">https://fundingcircle.github.io/fc4-framework/ • last edited 2019-09-18 by Avi Flax (avi.flax@fundingcircle.com) | Our paid plans designed for teams start from $15 per month - structurizr.com</tspan>
         </text>
       </g>
     </g>
     <g id="j_15" model-id="517e3918-02b4-46b3-b948-0868e4de36a4" class="joint-theme-default joint-cell joint-type-structurizr joint-type-structurizr-diagramtitle joint-element" data-type="structurizr.diagramTitle" transform="translate(20,1149)">
       <g id="v-173">
-        <text class="structurizrDiagramTitle structurizrMetadata" id="v-174" font-size="36px" y="0.8em" xml:space="preserve" font-weight="bold" text-anchor="start" fill="#000000" pointer-events="none" font-family="Open Sans" transform="matrix(1,0,0,1,0,0)">
-          <tspan id="v-175" class="v-line" dy="0em" x="0">Container&nbsp;diagram&nbsp;for&nbsp;fc4-tool</tspan>
+        <text class="structurizrDiagramTitle structurizrMetadata" id="v-174" font-size="36px" y="0.8em" font-weight="bold" text-anchor="start" fill="#000000" pointer-events="none" font-family="Open Sans" transform="matrix(1,0,0,1,0,0)">
+          <tspan id="v-175" class="v-line" dy="0em" x="0">Container diagram for fc4-tool</tspan>
         </text>
       </g>
     </g>
@@ -44,11 +44,11 @@
       style="cursor: move !important">
       <g id="v-35">
         <rect class="structurizrBoundary structurizrHighlightableElement" id="v-36" width="1240" height="367" rx="0" ry="0" fill="#ffffff" stroke="#444444" stroke-width="2" stroke-dasharray="20,20" pointer-events="none"></rect>
-        <text class="structurizrName" id="v-37" font-size="26px" y="326" xml:space="preserve" font-weight="bold" fill="#444444" x="10" text-anchor="start" pointer-events="visible" font-family="Open Sans" transform="matrix(1,0,0,1,10,0)">
+        <text class="structurizrName" id="v-37" font-size="26px" y="326" font-weight="bold" fill="#444444" x="10" text-anchor="start" pointer-events="visible" font-family="Open Sans" transform="matrix(1,0,0,1,10,0)">
           <tspan id="v-39" class="v-line" dy="0em" x="0">fc4-tool</tspan>
         </text>
-        <text class="structurizrMetaData" id="v-38" font-size="21px" y="352" xml:space="preserve" fill="#444444" x="10" text-anchor="start" pointer-events="visible" font-family="Open Sans" font-weight="normal" transform="matrix(1,0,0,1,10,0)">
-          <tspan id="v-40" class="v-line" dy="0em" x="0">[Software&nbsp;System]</tspan>
+        <text class="structurizrMetaData" id="v-38" font-size="21px" y="352" fill="#444444" x="10" text-anchor="start" pointer-events="visible" font-family="Open Sans" font-weight="normal" transform="matrix(1,0,0,1,10,0)">
+          <tspan id="v-40" class="v-line" dy="0em" x="0">[Software System]</tspan>
         </text>
       </g>
     </g>
@@ -64,14 +64,14 @@
         <circle class="structurizrPersonHead structurizrHighlightableElement" cx="175" cy="77.77777777777777" r="77.77777777777777" id="v-45" stroke="#2079c6" stroke-width="2" pointer-events="visiblePainted" fill="#2486dc"></circle>
         <line class="structurizrPersonRightArm" x1="70" y1="233.33333333333334" x2="70" y2="350" style="stroke-width:2px" id="v-52" stroke="#2079c6"></line>
         <line class="structurizrPersonLeftArm" x1="280" y1="233.33333333333334" x2="280" y2="350" style="stroke-width:2px" id="v-53" stroke="#2079c6"></line>
-        <text class="structurizrName" id="v-47" font-size="36px" y="0.8em" xml:space="preserve" font-weight="bold" text-anchor="middle" pointer-events="visible" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,175,175)">
-          <tspan id="v-54" class="v-line" dy="0em" x="0">Software&nbsp;Creator</tspan>
-          <tspan id="v-55" class="v-line" dy="1.2em" x="0">or&nbsp;Documentarian</tspan>
+        <text class="structurizrName" id="v-47" font-size="36px" y="0.8em" font-weight="bold" text-anchor="middle" pointer-events="visible" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,175,175)">
+          <tspan id="v-54" class="v-line" dy="0em" x="0">Software Creator</tspan>
+          <tspan id="v-55" class="v-line" dy="1.2em" x="0">or Documentarian</tspan>
         </text>
-        <text class="structurizrMetaData" id="v-48" font-size="21px" y="0.8em" xml:space="preserve" text-anchor="middle" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,175,260)">
+        <text class="structurizrMetaData" id="v-48" font-size="21px" y="0.8em" text-anchor="middle" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,175,260)">
           <tspan id="v-56" class="v-line" dy="0em" x="0">[Person]</tspan>
         </text>
-        <text class="structurizrDescription" id="v-49" font-size="26px" y="0.8em" display="none" xml:space="preserve" text-anchor="middle" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,175,315)">
+        <text class="structurizrDescription" id="v-49" font-size="26px" y="0.8em" display="none" text-anchor="middle" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,175,315)">
           <tspan id="v-57" class="v-line v-empty-line" dy="0em" x="0" style="fill-opacity: 0; stroke-opacity: 0;">-</tspan>
         </text>
         <text class="structurizrNavigation" id="v-50" font-weight="bold" text-anchor="middle" display="none" font-family="Open Sans" fill="#5ba4e5" font-size="26" transform="matrix(1,0,0,1,175,324.8)"></text>
@@ -87,15 +87,15 @@
       style="cursor: move !important">
       <g class="structurizrElement" id="v-63">
         <rect class="structurizrBox structurizrHighlightableElement" id="v-64" rx="20" ry="20" stroke="#2079c6" stroke-width="2" pointer-events="visiblePainted" fill="#2486dc" width="400" height="250"></rect>
-        <text class="structurizrName" id="v-65" font-size="36" y="0.8em" xml:space="preserve" font-weight="bold" text-anchor="middle" pointer-events="visible" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,200,43.8)">
-          <tspan id="v-70" class="v-line" dy="0em" x="0">Structurizr&nbsp;Express</tspan>
+        <text class="structurizrName" id="v-65" font-size="36" y="0.8em" font-weight="bold" text-anchor="middle" pointer-events="visible" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,200,43.8)">
+          <tspan id="v-70" class="v-line" dy="0em" x="0">Structurizr Express</tspan>
         </text>
-        <text class="structurizrMetaData" id="v-66" font-size="21" y="0.8em" xml:space="preserve" text-anchor="middle" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,200,86.3)">
-          <tspan id="v-71" class="v-line" dy="0em" x="0">[Software&nbsp;System]</tspan>
+        <text class="structurizrMetaData" id="v-66" font-size="21" y="0.8em" text-anchor="middle" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,200,86.3)">
+          <tspan id="v-71" class="v-line" dy="0em" x="0">[Software System]</tspan>
         </text>
-        <text class="structurizrDescription" id="v-67" font-size="26" y="0.8em" xml:space="preserve" text-anchor="middle" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,200,141.3)">
-          <tspan id="v-72" class="v-line" dy="0em" x="0">Web&nbsp;app&nbsp;that&nbsp;renders</tspan>
-          <tspan id="v-73" class="v-line" dy="1.2em" x="0">diagrams&nbsp;from&nbsp;YAML</tspan>
+        <text class="structurizrDescription" id="v-67" font-size="26" y="0.8em" text-anchor="middle" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,200,141.3)">
+          <tspan id="v-72" class="v-line" dy="0em" x="0">Web app that renders</tspan>
+          <tspan id="v-73" class="v-line" dy="1.2em" x="0">diagrams from YAML</tspan>
         </text>
         <text class="structurizrNavigation" id="v-68" font-weight="bold" text-anchor="middle" display="none" font-family="Open Sans" fill="#5ba4e5" font-size="26" transform="matrix(1,0,0,1,200,225)"></text>
         <image class="structurizrIcon" id="v-69"></image>
@@ -110,16 +110,16 @@
       style="cursor: move !important">
       <g class="structurizrElement" id="v-81">
         <rect class="structurizrBox structurizrHighlightableElement" id="v-82" rx="20" ry="20" stroke="#2079c6" stroke-width="2" pointer-events="visiblePainted" fill="#2486dc" width="400" height="250"></rect>
-        <text class="structurizrName" id="v-83" font-size="36" y="0.8em" xml:space="preserve" font-weight="bold" text-anchor="middle" pointer-events="visible" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,200,27.5)">
-          <tspan id="v-88" class="v-line" dy="0em" x="0">Main&nbsp;Executable</tspan>
+        <text class="structurizrName" id="v-83" font-size="36" y="0.8em" font-weight="bold" text-anchor="middle" pointer-events="visible" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,200,27.5)">
+          <tspan id="v-88" class="v-line" dy="0em" x="0">Main Executable</tspan>
         </text>
-        <text class="structurizrMetaData" id="v-84" font-size="21" y="0.8em" xml:space="preserve" text-anchor="middle" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,200,70)">
-          <tspan id="v-89" class="v-line" dy="0em" x="0">[Container:&nbsp;Clojure/Java/JVM]</tspan>
+        <text class="structurizrMetaData" id="v-84" font-size="21" y="0.8em" text-anchor="middle" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,200,70)">
+          <tspan id="v-89" class="v-line" dy="0em" x="0">[Container: Clojure/Java/JVM]</tspan>
         </text>
-        <text class="structurizrDescription" id="v-85" font-size="26" y="0.8em" xml:space="preserve" text-anchor="middle" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,200,125)">
-          <tspan id="v-90" class="v-line" dy="0em" x="0">Reformats&nbsp;YAML,&nbsp;snaps</tspan>
-          <tspan id="v-91" class="v-line" dy="1.2em" x="0">coordinates,&nbsp;orchestrates</tspan>
-          <tspan id="v-92" class="v-line" dy="1.2em" x="0">rendering,&nbsp;etc.</tspan>
+        <text class="structurizrDescription" id="v-85" font-size="26" y="0.8em" text-anchor="middle" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,200,125)">
+          <tspan id="v-90" class="v-line" dy="0em" x="0">Reformats YAML, snaps</tspan>
+          <tspan id="v-91" class="v-line" dy="1.2em" x="0">coordinates, orchestrates</tspan>
+          <tspan id="v-92" class="v-line" dy="1.2em" x="0">rendering, etc.</tspan>
         </text>
         <text class="structurizrNavigation" id="v-86" font-weight="bold" text-anchor="middle" display="none" font-family="Open Sans" fill="#5ba4e5" font-size="26" transform="matrix(1,0,0,1,200,225)"></text>
         <image class="structurizrIcon" id="v-87"></image>
@@ -134,15 +134,15 @@
       style="cursor: move !important">
       <g class="structurizrElement" id="v-96">
         <rect class="structurizrBox structurizrHighlightableElement" id="v-97" rx="20" ry="20" stroke="#2079c6" stroke-width="2" pointer-events="visiblePainted" fill="#2486dc" width="400" height="250"></rect>
-        <text class="structurizrName" id="v-98" font-size="36" y="0.8em" xml:space="preserve" font-weight="bold" text-anchor="middle" pointer-events="visible" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,200,43.8)">
+        <text class="structurizrName" id="v-98" font-size="36" y="0.8em" font-weight="bold" text-anchor="middle" pointer-events="visible" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,200,43.8)">
           <tspan id="v-103" class="v-line" dy="0em" x="0">Chromium</tspan>
         </text>
-        <text class="structurizrMetaData" id="v-99" font-size="21" y="0.8em" xml:space="preserve" text-anchor="middle" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,200,86.3)">
+        <text class="structurizrMetaData" id="v-99" font-size="21" y="0.8em" text-anchor="middle" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,200,86.3)">
           <tspan id="v-104" class="v-line" dy="0em" x="0">[Container]</tspan>
         </text>
-        <text class="structurizrDescription" id="v-100" font-size="26" y="0.8em" xml:space="preserve" text-anchor="middle" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,200,141.3)">
-          <tspan id="v-105" class="v-line" dy="0em" x="0">or&nbsp;Chrome;&nbsp;Web&nbsp;browser;</tspan>
-          <tspan id="v-106" class="v-line" dy="1.2em" x="0">runs&nbsp;in&nbsp;headless&nbsp;mode</tspan>
+        <text class="structurizrDescription" id="v-100" font-size="26" y="0.8em" text-anchor="middle" font-family="Open Sans" fill="#ffffff" transform="matrix(1,0,0,1,200,141.3)">
+          <tspan id="v-105" class="v-line" dy="0em" x="0">or Chrome; Web browser;</tspan>
+          <tspan id="v-106" class="v-line" dy="1.2em" x="0">runs in headless mode</tspan>
         </text>
         <text class="structurizrNavigation" id="v-101" font-weight="bold" text-anchor="middle" display="none" font-family="Open Sans" fill="#5ba4e5" font-size="26" transform="matrix(1,0,0,1,200,225)"></text>
         <image class="structurizrIcon" id="v-102"></image>
@@ -157,14 +157,14 @@
       <g class="labels">
         <g class="label" id="v-114" label-idx="0" transform="translate(1107, 818)">
           <rect id="v-116" fill="#ffffff" rx="3" ry="3" stroke="#ffffff" stroke-width="20px" pointer-events="none" width="175.40625" height="62.59375" transform="matrix(1,0,0,1,-87.7,-31.3)"></rect>
-          <text id="v-115" font-size="24px" y="0.8em" xml:space="preserve" text-anchor="middle" pointer-events="none" fill="#707070" font-family="Open Sans" font-weight="bold" transform="matrix(1,0,0,1,0,-24)">
-            <tspan id="v-117" class="v-line" dy="0em" x="0">loads&nbsp;and&nbsp;uses</tspan>
-            <tspan id="v-118" class="v-line" dy="1.2em" x="0">for&nbsp;rendering</tspan>
+          <text id="v-115" font-size="24px" y="0.8em" text-anchor="middle" pointer-events="none" fill="#707070" font-family="Open Sans" font-weight="bold" transform="matrix(1,0,0,1,0,-24)">
+            <tspan id="v-117" class="v-line" dy="0em" x="0">loads and uses</tspan>
+            <tspan id="v-118" class="v-line" dy="1.2em" x="0">for rendering</tspan>
           </text>
         </g>
         <g class="label" id="v-119" label-idx="1" transform="translate(1107, 861.2)">
           <rect id="v-121" fill="#ffffff" rx="3" ry="3" pointer-events="none" width="0" height="0" transform="matrix(1,0,0,1,0,0)"></rect>
-          <text id="v-120" font-size="19px" y="0.8em" display="none" xml:space="preserve" text-anchor="middle" pointer-events="none" fill="#707070" font-family="Open Sans" font-weight="normal" transform="matrix(1,0,0,1,0,0)">
+          <text id="v-120" font-size="19px" y="0.8em" display="none" text-anchor="middle" pointer-events="none" fill="#707070" font-family="Open Sans" font-weight="normal" transform="matrix(1,0,0,1,0,0)">
             <tspan id="v-122" class="v-line v-empty-line" dy="0em" x="0" style="fill-opacity: 0; stroke-opacity: 0;">-</tspan>
           </text>
         </g>
@@ -205,14 +205,14 @@
       <g class="labels">
         <g class="label" id="v-135" label-idx="0" transform="translate(890, 625)">
           <rect id="v-137" fill="#ffffff" rx="3" ry="3" stroke="#ffffff" stroke-width="20px" pointer-events="none" width="159.15625" height="62.59375" transform="matrix(1,0,0,1,-79.6,-31.3)"></rect>
-          <text id="v-136" font-size="24px" y="0.8em" xml:space="preserve" text-anchor="middle" pointer-events="none" fill="#707070" font-family="Open Sans" font-weight="bold" transform="matrix(1,0,0,1,0,-24)">
-            <tspan id="v-138" class="v-line" dy="0em" x="0">launches&nbsp;and</tspan>
+          <text id="v-136" font-size="24px" y="0.8em" text-anchor="middle" pointer-events="none" fill="#707070" font-family="Open Sans" font-weight="bold" transform="matrix(1,0,0,1,0,-24)">
+            <tspan id="v-138" class="v-line" dy="0em" x="0">launches and</tspan>
             <tspan id="v-139" class="v-line" dy="1.2em" x="0">controls</tspan>
           </text>
         </g>
         <g class="label" id="v-140" label-idx="1" transform="translate(890, 668.2)">
           <rect id="v-142" fill="#ffffff" rx="3" ry="3" pointer-events="none" width="0" height="0" transform="matrix(1,0,0,1,0,0)"></rect>
-          <text id="v-141" font-size="19px" y="0.8em" display="none" xml:space="preserve" text-anchor="middle" pointer-events="none" fill="#707070" font-family="Open Sans" font-weight="normal" transform="matrix(1,0,0,1,0,0)">
+          <text id="v-141" font-size="19px" y="0.8em" display="none" text-anchor="middle" pointer-events="none" fill="#707070" font-family="Open Sans" font-weight="normal" transform="matrix(1,0,0,1,0,0)">
             <tspan id="v-143" class="v-line v-empty-line" dy="0em" x="0" style="fill-opacity: 0; stroke-opacity: 0;">-</tspan>
           </text>
         </g>
@@ -253,13 +253,13 @@
       <g class="labels">
         <g class="label" id="v-154" label-idx="0" transform="translate(682, 443)">
           <rect id="v-156" fill="#ffffff" rx="3" ry="3" stroke="#ffffff" stroke-width="20px" pointer-events="none" width="92.53125" height="33.78125" transform="matrix(1,0,0,1,-46.3,-16.8)"></rect>
-          <text id="v-155" font-size="24px" y="0.8em" xml:space="preserve" text-anchor="middle" pointer-events="none" fill="#707070" font-family="Open Sans" font-weight="bold" transform="matrix(1,0,0,1,0,-9.5)">
+          <text id="v-155" font-size="24px" y="0.8em" text-anchor="middle" pointer-events="none" fill="#707070" font-family="Open Sans" font-weight="bold" transform="matrix(1,0,0,1,0,-9.5)">
             <tspan id="v-157" class="v-line" dy="0em" x="0">invokes</tspan>
           </text>
         </g>
         <g class="label" id="v-158" label-idx="1" transform="translate(682, 474.2)">
           <rect id="v-160" fill="#ffffff" rx="3" ry="3" pointer-events="none" width="0" height="0" transform="matrix(1,0,0,1,0,0)"></rect>
-          <text id="v-159" font-size="19px" y="0.8em" display="none" xml:space="preserve" text-anchor="middle" pointer-events="none" fill="#707070" font-family="Open Sans" font-weight="normal" transform="matrix(1,0,0,1,0,0)">
+          <text id="v-159" font-size="19px" y="0.8em" display="none" text-anchor="middle" pointer-events="none" fill="#707070" font-family="Open Sans" font-weight="normal" transform="matrix(1,0,0,1,0,0)">
             <tspan id="v-161" class="v-line v-empty-line" dy="0em" x="0" style="fill-opacity: 0; stroke-opacity: 0;">-</tspan>
           </text>
         </g>
@@ -302,7 +302,7 @@
           class="structurizrDiagramWatermark"
           id="v-169"
           y="0.8em"
-          xml:space="preserve"
+
           font-family="Open Sans"
           font-weight="bolder"
           text-anchor="middle"
