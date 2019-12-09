@@ -1,11 +1,12 @@
 (ns fc4.integrations.structurizr.express.export-test
   (:require [clojure.spec.alpha      :as s]
+            [clojure.spec.gen.alpha  :as gen]
             [clojure.string          :as string :refer [includes?]]
             [clojure.test            :as ct :refer [deftest is testing]]
             [cognitect.anomalies     :as anom]
             [expound.alpha           :as expound]
             [fc4.integrations.structurizr.express.export :as e]
-            [fc4.io.dsl              :as dsl]
+            [fc4.io.model.dsl              :as dsl]
             [fc4.model               :as m]
             [fc4.test-utils          :as tu :refer [check]]
             [fc4.view                :as v]))
@@ -16,7 +17,14 @@
 (deftest deps-of (check `e/deps-of))
 (deftest dequalify-keys (check `e/dequalify-keys))
 (deftest elements (check `e/elements))
-(deftest get-subject (check `e/get-subject))
+
+(deftest get-subject
+  (check `e/get-subject
+         1000
+         ;; Override the name generator because the subject named in the view
+         ;; needs to exist in the generated model.
+         {::m/name #(gen/return "A")}))
+
 (deftest inject-control-points (check `e/inject-control-points))
 (deftest relationship-with (check `e/relationship-with))
 
@@ -45,7 +53,7 @@
   (testing "generative"
     (check `e/view->system-context
            200
-           {::m/uses #(s/gen (s/coll-of (s/merge ::system-ref
+           {::m/uses #(s/gen (s/coll-of (s/merge ::m/system-ref
                                                  (s/keys :req [::system]))))}))
 
   (testing "on-disk examples"

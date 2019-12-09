@@ -27,15 +27,6 @@
   :args (s/cat :args ::ns-tuples)
   :ret  nil?)
 
-(defn lookup-table-by
-  "Given a function and a seqable, returns a map of (f x) to x.
-
-  For example:
-  => (lookup-table-by :name [{:name :foo} {:name :bar}])
-  {:foo {:name :foo}, :bar {:name :bar}}"
-  [f xs]
-  (zipmap (map f xs) xs))
-
 (defn add-ns
   [namespace keeword]
   (keyword (name namespace) (name keeword)))
@@ -50,8 +41,8 @@
   :ret  qualified-keyword?)
 
 (defn update-all
-  "Given a map and a function of entry (coll of two elems) to entry, applies the
-  function recursively to every entry in the map."
+  "Given a map and a function of entry to entry, applies the function recursively to every entry in
+  the map, including in nested maps, to infinite depth."
   {:fork-of 'clojure.walk/stringify-keys}
   [f m]
   (postwalk
@@ -71,8 +62,7 @@
   :ret  map?)
 
 (defn qualify-keys
-  "Given a nested map with keyword keys, qualifies all keys, recursively, with
-  the current namespace."
+  "Given a nested map with keyword keys, qualifies all keys, recursively, with the given namespace."
   [m ns-name]
   (update-all
    (fn [[k v]]
@@ -107,13 +97,6 @@
        (throw e)
        e))))
 
-(defn fault
-  "Convenience function for constructing an :cognitect.anomalies/anomaly with
-  :cognitect.anomalies/category being :cognitect.anomalies/fault."
-  [message]
-  {::anom/category ::anom/fault
-   ::anom/message message})
-
 (defmacro with-timeout
   "If the timeout elapses before the body has completed, a TimeoutException will be thrown with a
   not-particularly-helpful message."
@@ -126,3 +109,18 @@
        (future-cancel fut#)
        (throw (TimeoutException. (format "Timed out after %d millis" ~ms))))
      ret#))
+
+(defn fault
+  "Given a message, returns a :cognitect.anomalies/anomaly with :anom/category
+  set to ::anom/fault and ::anom/message set to the provided message."
+  [msg]
+  {::anom/category ::anom/fault
+   ::anom/message  msg})
+
+(s/fdef fault
+  :args (s/cat :msg string?)
+  :ret  ::anom/anomaly)
+
+(defn fault?
+  [v]
+  (s/valid? ::anom/anomaly v))

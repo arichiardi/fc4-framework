@@ -1,8 +1,6 @@
 (ns fc4.integrations.structurizr.express.export
   "Functions concerned with exporting FC4 views as Structurizr Express diagrams."
   (:require [cognitect.anomalies  :as anom]
-            [clj-yaml.core        :as yaml]
-            [clojure.walk         :as walk :refer [postwalk]]
             [clojure.spec.alpha   :as s]
             [clojure.string       :as string :refer [includes? join]]
             [fc4.integrations.structurizr.express.spec] ;; for side fx
@@ -10,8 +8,7 @@
             [fc4.spec             :as fs]
             [fc4.styles           :as ss]
             [fc4.util             :as fu :refer [namespaces update-all]]
-            [fc4.view             :as v]
-            [fc4.yaml             :as fy :refer [split-file]]))
+            [fc4.view             :as v]))
 
 (namespaces '[structurizr :as st])
 
@@ -32,18 +29,18 @@
 
 (defn- add-in-house-tag
   [tags]
-  (if (contains? tags :external)
+  (if (true? (tags "external"))
     tags
-    (conj tags :in-house)))
+    (assoc tags "in-house" true)))
 
 (s/fdef add-in-house-tag
   :args (s/cat :tags ::m/tags)
   :ret  ::m/tags
   :fn   (fn [{{in-tags :tags} :args, out-tags :ret}]
-          (if (:external in-tags)
+          (if (some-> (in-tags "external") second true?)
             (= in-tags out-tags)
-            (and (contains? out-tags :in-house)
-                 (= in-tags (disj out-tags :in-house))))))
+            (and (contains? out-tags "in-house")
+                 (= in-tags (dissoc out-tags "in-house"))))))
 
 (defn- replace-internal-tag
   "The tag “internal” is a special reserved tag for Structurizr Express; for
@@ -51,53 +48,41 @@
   diagrams and Container diagrams, the set of elements that have “internal”
   (case insensitive) is used to draw the boundary box. So when exporting an FC4
   view+model+styles as Structurizr Express diagram, we need to transform the
-  tag :interal to something that is _not_ reserved, so we use :in-house."
+  tag “internal” to something that is _not_ reserved, so we use “in-house”."
   [tags]
-  (if-not (contains? tags :internal)
+  (if-not (contains? tags "internal")
     tags
     (-> tags
-        (disj :internal)
-        (conj :in-house))))
+        (dissoc "internal")
+        (assoc "in-house" (tags "internal")))))
 
 (s/fdef replace-internal-tag
   :args (s/cat :tags ::m/tags)
   :ret  ::m/tags
   :fn   (fn [{{in-tags :tags} :args, out-tags :ret}]
-          (if (:internal in-tags)
-            (and (contains? out-tags :in-house)
-                 (not (contains? out-tags :internal))
+          (if (contains? in-tags "internal")
+            (and (= (out-tags "in-house") (in-tags "internal"))
+                 (not (contains? out-tags "internal"))
                  (= (count in-tags) (count out-tags)))
             (= in-tags out-tags))))
 
 (defn- tags
   [elem]
-  (->> (::m/tags elem)
+  (->> (get elem ::m/tags {})
        (replace-internal-tag)
        (add-in-house-tag)
-       (map name) ; converts set to a seq but in this case that’s OK as we then convert it to a str
+       (map (fn [[k v]] (str k "-" v)))
        (join ",")))
 
 (s/fdef tags
   :args (s/cat :elem ::m/element)
   :ret  ::st/tags
   :fn   (fn [{{{in-tags ::m/tags} :elem} :args, out-tags :ret}]
-          (every? (fn [in-tag]
-                    (condp = in-tag
-                      :internal
+          (every? (fn [[tag-name [_tag-tag _tag-value]]]
+                    (if (= tag-name "internal")
                       (and (includes? out-tags "in-house")
                            (not (includes? out-tags "internal")))
-
-                      :external
-                            ; You might think we’d want to ensure that out-tags
-                            ; does *not* include "in-house". But! What if
-                            ; in-tags contains both :internal *and* :external!?
-                            ; So yeah... the input is nonsensical, but this fn
-                            ; still has to handle it somehow. I decided to go
-                            ; with GIGO — data validation is not the job of this
-                            ; fn, nor is linting.
-                      (includes? out-tags "external")
-
-                      (includes? out-tags (name in-tag))))
+                      (includes? out-tags tag-name)))
                   in-tags)))
 
 (defn dequalify-keys
@@ -152,9 +137,10 @@
   view under [::v/positions ::v/users] then the returned element will have the
   position '0,0'."
   [user-name view model]
-  (if-let [user (get-in model [::m/users user-name]
-                        {::m/name (str user-name " (undefined)")})]
-    (-> (select-keys user [::m/name ::m/description ::m/tags])
+  (if-let [user (or (some-> (get-in model [::m/users user-name])
+                            (assoc :name user-name))
+                    {:name (str user-name " (undefined)")})]
+    (-> (select-keys user [:name ::m/description ::m/tags])
         (dequalify-keys)
         (merge {:type "Person"
                 :position (get-in view [::v/positions ::v/users user-name] "0,0")
@@ -188,7 +174,7 @@
 (s/fdef deps-of
   :args (s/cat :system ::m/system-map
                :model  ::m/model)
-  :ret  (s/coll-of ::m/sys-ref))
+  :ret  (s/coll-of ::m/system-ref))
 
 (defn- users-of
   "Returns the systems that use the subject system."
@@ -211,7 +197,7 @@
                            (::m/system dep))}))
 
 (s/fdef dep->relationship
-  :args (s/cat :dep          ::m/sys-ref
+  :args (s/cat :dep          ::m/system-ref
                :subject-name ::m/name)
   :ret  ::st/relationship
   :fn   (fn [{{:keys [dep subject-name]} :args, ret :ret}]
@@ -243,7 +229,8 @@
 
 (defn- get-subject
   [{subject-name ::v/system :as view} model]
-  (get-in model [::m/systems subject-name]))
+  (or (get-in model [::m/systems subject-name])
+      (get-in model [::m/systems (keyword subject-name)])))
 
 (s/fdef get-subject
   :args (s/cat :view ::v/view
@@ -378,7 +365,7 @@
   :ret  :structurizr.diagram/relationships
   :fn   (fn [{{:keys [view model]} :args
               ret                  :ret}]
-          (let [{sub-name    ::m/name
+          (let [{_sub-name    ::m/name
                  direct-deps ::m/uses} (get-subject view model)]
                   ;; TODO: also verify control points
             (every? (fn [{dep-sys-name ::m/system :as dep}]

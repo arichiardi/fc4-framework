@@ -6,20 +6,15 @@
             [fc4.spec               :as fs]
             [fc4.util               :as util]))
 
-(load "/fc4/integrations/structurizr/express/spec")
-
-(s/def ::description ::fs/non-blank-str) ;; Could reasonably have linebreaks.
-
-;; We need that generator! See comment in definition of ::m/name.
-(s/def ::name ::m/name)
-(s/def ::system ::m/name)
-
 ;; You might ask: why copy specs over from a different namespace? It’s because
 ;; when the views are parsed from YAML files and we end up with non-namespaced
 ;; keyword keys, and we then post-process them to qualify them with namespaces,
 ;; it’s impractical to qualify them with _different_ namespaces, so we’re going
 ;; to qualify them all with _the same_ namespace. Thus, that namespace needs to
 ;; include definitions for -all- the keys that appear in the YAML files.
+(s/def ::name ::m/name)
+(s/def ::system ::m/name)
+(s/def ::description ::m/description)
 (s/def ::coord-string ::fs/coord-string)
 
 (s/def ::subject ::coord-string)
@@ -59,12 +54,38 @@
    :req [::system-context]
    :opt [::container]))
 
-(s/def ::size :structurizr.diagram/size)
+(s/def ::size
+  ;; These options come from Structurizr Express, because that’s our current renderer. And yeah,
+  ;; that’s leaking an implementation detail through, but I can’t think of a way to avoid this. The
+  ;; same applies to styles. I suppose that means we might need to support these values forever, but
+  ;; I think maybe we can live with that.
+  ;; If you’re wondering why this doesn’t just reference the same value over in
+  ;; src/main/fc4/integrations/structurizr/express/spec.clj, it’s because I don’t want this lib to
+  ;; depend on that lib, because this lib is part of the “core” fc4 code while that lib is part of
+  ;; an “integration” that may have a shorter shelf-life. I also don’t want to load all that code
+  ;; at runtime when it’s not really needed.
+  #{"A2_Landscape"
+    "A2_Portrait"
+    "A3_Landscape"
+    "A3_Portrait"
+    "A4_Landscape"
+    "A4_Portrait"
+    "A5_Landscape"
+    "A5_Portrait"
+    "A6_Landscape"
+    "A6_Portrait"
+    "Legal_Landscape"
+    "Legal_Portrait"
+    "Letter_Landscape"
+    "Letter_Portrait"
+    "Slide_16_9"
+    "Slide_4_3"})
 
 (s/def ::view
   (s/keys
    :req [::system ::positions ::control-points ::size]
    :opt [::description]))
+
 
 (defn- fixup-keys
   "Finds any keyword keys that contain spaces and/or capital letters and
@@ -99,7 +120,7 @@
 
 (defn view-from-file
   "Parses the contents of a YAML file, then processes those contents such that
-  each element conforms to ::view."
+  the result conforms to ::view."
   [file-contents]
   (-> (yaml/parse-string file-contents)
       ;; Both the below functions do a walk through the view; this is
@@ -115,7 +136,4 @@
 
 (s/fdef view-from-file
   :args (s/cat :file-contents ::yaml-file-contents)
-  :ret  ::view
-  :fn   (fn [{{:keys [file-contents]} :args, ret :ret}]
-          (= file-contents
-             (yaml/generate-string ret))))
+  :ret  ::view)
