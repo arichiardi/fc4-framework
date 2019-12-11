@@ -2,7 +2,7 @@
   (:require [clj-yaml.core :as yaml]
             [clojure.spec.alpha :as s]
             [clojure.spec.gen.alpha :as gen]
-            [clojure.string :refer [starts-with?]]
+            [clojure.string :refer [includes? starts-with?]]
             [cognitect.anomalies :as anom]
             [expound.alpha :as expound :refer [expound-str]]
             [fc4.spec :as fs]
@@ -149,10 +149,9 @@
   (s/keys :req [::m/systems ::m/users ::m/datastores ::m/datatypes]))
 
 ;; “Root map” of model DSL YAML files. This is similar to a model, with these differences:
-;; * The keyword keys in a model must be qualified, whereas
 ;; * A model file may contain only a single root key, whereas a model must have all the root keys
 ;; * A model file may contain a root-level tags key, to be applied to every element in the file,
-;;   but a model doesn’t support this
+;;   but a model doesn’t allow this.
 ;; This spec is useful because it allows us to validate an individual model file.
 (s/def ::file
   (s/keys :req [(or ::m/systems ::m/users ::m/datastores ::m/datatypes)]
@@ -172,7 +171,7 @@
     ;; need values like "" and "foo" to be invalid as per this spec.
     (s/and string?
            (fn [v] (some #(starts-with? v %) ["systems" "users" "datastores"])))
-    #(gen/fmap yaml/generate-string (s/gen ::m/file-map))))
+    #(gen/fmap yaml/generate-string (s/gen ::file))))
 
 (defn- qualify-known-keys
   "First qualify each keyword key using the fc4.dsl.model namespace. Then check if a corresponding
@@ -182,33 +181,34 @@
   [m]
   (update-all
    (fn [[k v]]
-     (let [qualified (add-ns 'fc4.model k)]
+     (let [qualified (add-ns "fc4.model" k)]
        (if (s/get-spec qualified)
          [qualified v]
          [(name k) v])))
    m))
 
 (defn parse-file
-  "Given a YAML model file as a string, parses it, and qualifies all map keys
-  except those at the root so that the result has a chance of being a valid
-  ::m/file-map. If a file contains “top matter” then only the main document is
-  parsed. Performs very minimal validation. If the file contains malformed YAML,
-  or does not contain a map, an anomaly will be returned."
+  ;; TODO: apply the contents of the root-level :tags key to every element in the file, then remove
+  ;; that root-level :tags key.
+  "Given a YAML model file as a string, parses it, and qualifies all map keys so that the result has
+  a chance of being a valid ::file. If a file contains “top matter” then only the main document is
+  parsed. Performs very minimal validation. If the file contains malformed YAML, or does not contain
+  a map, an anomaly will be returned."
   [file-contents]
   (try
     (let [parsed (-> (split-file file-contents)
-                     (::m/fy/main)
+                     (::fy/main)
                      (yaml/parse-string))]
       (if (associative? parsed)
-        (map-vals qualify-known-keys parsed)
+        (qualify-known-keys parsed)
         (fault "Root data structure must be a map (mapping).")))
     (catch ParserException e
       (fault (str "YAML could not be parsed: error " e)))))
 
 (s/fdef parse-file
-  :args (s/cat :v (s/alt :valid-and-well-formed ::m/file-map-yaml-string
+  :args (s/cat :v (s/alt :valid-and-well-formed ::file-yaml-string
                          :invalid-or-malformed  string?))
-  :ret  (s/or :valid-and-well-formed ::m/file-map
+  :ret  (s/or :valid-and-well-formed ::file
               :invalid-or-malformed  ::anom/anomaly)
   :fn   (fn [{{arg :v} :args, ret :ret}]
           (= (first arg) (first ret))))
@@ -217,19 +217,65 @@
   "Returns either an error message as a string or nil."
   [parsed]
   (cond
-    (s/valid? ::m/file-map parsed)
+    (s/valid? ::file parsed)
     nil
 
     (fault? parsed)
     (::anom/message parsed)
 
     :else
-    (expound-str ::m/file-map parsed)))
+    (expound-str ::file parsed)))
 
 (s/fdef validate-parsed-file
-  :args (s/cat :parsed (s/alt :valid   ::m/file-map
+  :args (s/cat :parsed (s/alt :valid   ::file
                               :invalid map?))
   :ret  (s/or                 :valid   nil?
                               :invalid string?)
   :fn   (fn [{{arg :parsed} :args, ret :ret}]
           (= (first arg) (first ret))))
+
+(def empty-model
+  #::m{:systems {} :users {} :datastores {} :datatypes {}})
+
+(defn build-model
+  "Accepts a sequence of maps read from model YAML files and combines them into
+  a single model map. If any name collisions are detected then an anomaly is
+  returned. Does not validate the result."
+  [model-file-maps]
+  (reduce deep-merge empty-model model-file-maps))
+
+(defn ^:private contains-contents?
+  "Given a model and the contents of a parsed model DSL yaml file, a ::file-map, returns true if the
+  model contains all the contents of the file-map."
+  [model file-map]
+  ;; Ideally the below would validate *fully* that each element in the file is fully contained in
+  ;; the model. However, because an element can be defined in multiple files and therefore the
+  ;; resulting element in the model is a composite (a result of deeply merging the various
+  ;; definitions) I don’t know how to validate this. I guess I’m just not smart enough. I mean, I
+  ;; suspect I could figure it out eventually given enough time — it’d probably have to do with
+  ;; depth-first walking the file element and then confirming that the model contains the same value
+  ;; at the same path. But I don’t have the time or energy to figure that out right now.
+  ;; TODO: figure this out.
+  (->> (for [[tk tm] file-map]
+         (for [[k _v] tm]
+           (contains? (get model tk {}) k)))
+       (flatten)
+       (every? true?)))
+
+(s/fdef build-model
+  :args (s/cat :in (s/coll-of ::file :gen-max 10))
+  :ret  (s/or :success :fc4/model
+              :failure ::anom/anomaly)
+  :fn   (fn [{{:keys [in]}      :args
+              [ret-tag ret-val] :ret}]
+          (and
+           ; I saw, at least once, a case wherein the return value was both a valid model *and* a
+           ; valid anomaly. We don’t want this.
+           (not (and (s/valid? :fc4/model ret-val)
+                     (s/valid? ::anom/anomaly  ret-val)))
+           (case ret-tag
+             :success
+             (every? #(contains-contents? ret-val %) in)
+
+             :failure
+             (includes? (or (::anom/message ret-val) "") "duplicate names")))))

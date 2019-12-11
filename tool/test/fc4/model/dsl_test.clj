@@ -1,25 +1,11 @@
 (ns fc4.model.dsl-test
-  (:require [clojure.test :refer [deftest is testing]]
-            [fc4.model.dsl :as dsl]
-            [fc4.model :as m]
+  (:require [clojure.test :refer [deftest]]
+            [fc4.dsl.model :as dm]
             [fc4.test-utils :refer [check]]))
 
-(deftest parse-model-file     (check `dsl/parse-model-file 10))
-(deftest validate-parsed-file (check `dsl/validate-parsed-file 10))
-(deftest add-file-map         (check `dsl/add-file-map 20))
+(deftest parse-file (check `dm/parse-file 50))
+(deftest validate-parsed-file (check `dm/validate-parsed-file 100))
 
-(deftest build-model
-  ;; 10 is a really low number of test cases, but it takes ~45 seconds on my
-  ;; laptop. So it might be worth looking into speeding up this test.
-  (testing "property tests"
-    (check `dsl/build-model 10))
-  (testing "example tests"
-    (testing "the contents of multiple files are aggregated, even when the root keys in the files vary"
-      (let [file-maps [{:systems {"foo" {:description "bar"}
-                                  "baz" {:description "quux"}}}
-                       {:system {"blargh" {:description "bleergh"}}}]
-            result (dsl/build-model file-maps)]
-        (is (= #::m{"foo"    {:description "bar"}
-                    "baz"    {:description "quux"}
-                    "blargh" {:description "bleergh"}}
-               (::m/systems result)))))))
+;; 20 is a really low number of test cases, but it takes ~33 seconds on my laptop. So it might be
+;; worth looking into speeding up this test.
+(deftest build-model (check `dm/build-model 20))
