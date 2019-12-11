@@ -9,15 +9,25 @@
   (s/+ (s/tuple simple-symbol? #{:as} simple-symbol?)))
 
 ;; TODO: consider making this a macro so the ns-symbols won’t have to be quoted
-;; when calling them.
-(defn namespaces
+;; when calling them. Also so maybe the alias will be created in the correct namespace, so maybe
+;; linters will be happier.
+; (defn namespaces
+;   "Pass one or more tuples of namespaces to create along with aliases:
+;   (namespaces '[foo :as f] '[bar :as b])"
+;   [t & ts] ; At least one tuple is required.
+;   {:pre [(s/valid? ::ns-tuples (concat [t] ts))]}
+;   (doseq [[ns-sym _ alias-sym] (concat [t] ts)]
+;     (create-ns ns-sym)
+;     (alias alias-sym ns-sym)))
+
+(defmacro namespaces
   "Pass one or more tuples of namespaces to create along with aliases:
   (namespaces '[foo :as f] '[bar :as b])"
   [t & ts] ; At least one tuple is required.
-  {:pre [(s/valid? ::ns-tuples (concat [t] ts))]}
-  (doseq [[ns-sym _ alias-sym] (concat [t] ts)]
-    (create-ns ns-sym)
-    (alias alias-sym ns-sym)))
+  ; {:pre [(s/valid? ::ns-tuples (concat [t] ts))]}
+  `(doseq [[ns-sym# _ alias-sym#] (concat [t] ts)]
+     (create-ns ns-sym#)
+     (alias alias-sym ns-sym#)))
 
 ; This spec is here for documentation and instrumentation; don’t do any
 ; generative testing with this spec because this function has side effects (and
