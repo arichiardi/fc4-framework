@@ -1,4 +1,4 @@
-(ns fc4.view
+(ns fc4.dsl.view
   (:require [clj-yaml.core           :as yaml]
             [clojure.spec.alpha      :as s]
             [clojure.spec.gen.alpha  :as gen]

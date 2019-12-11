@@ -1,6 +1,5 @@
 (ns fc4.model.dsl
   (:require [clj-yaml.core :as yaml]
-            [clojure.set :refer [intersection superset?]]
             [clojure.spec.alpha :as s]
             [clojure.spec.gen.alpha :as gen]
             [clojure.string :refer [includes? join starts-with?]]
@@ -11,54 +10,6 @@
             [fc4.yaml :as fy :refer [split-file]]
             [medley.core :refer [deep-merge map-vals]])
   (:import [org.yaml.snakeyaml.parser ParserException]))
-
-;;;; Keys that may appear at the root of the YAML files:
-
-; Singular — these are unique to the DSL
-(s/def ::system     (s/map-of ::m/name ::m/system-map     :min-count 1 :max-count 1))
-(s/def ::user       (s/map-of ::m/name ::m/user-map       :min-count 1 :max-count 1))
-(s/def ::datastore  (s/map-of ::m/name ::m/datastore-map :min-count 1 :max-count 1))
-(s/def ::datatype   (s/map-of ::m/name ::m/datatype-map  :min-count 1 :max-count 1))
-
-; Plural — these are nearly identical to the corresponding keys in fc4.model;
-; the only differences are cardinalities.
-(s/def ::systems    (s/map-of ::m/name ::m/system-map     :min-count 1 :gen-max 3))
-(s/def ::users      (s/map-of ::m/name ::m/user-map       :min-count 1 :gen-max 3))
-(s/def ::datastores (s/map-of ::m/name ::m/datastore-map :min-count 1 :gen-max 3))
-(s/def ::datatypes  (s/map-of ::m/name ::m/datatype-map  :min-count 1 :gen-max 3))
-
-;;;; “Root map” of model YAML files:
-(s/def ::file-map
-  (s/and (s/keys :req-un [(or (or ::system    ::systems)
-                              (or ::user      ::users)
-                              (or ::datastore ::datastores)
-                              (or ::datatype  ::datatypes))]
-                 :opt-un [::system    ::systems
-                          ::user      ::users
-                          ::datastore ::datastores
-                          ::datatype  ::datatypes
-                          ;; tags to be applied to every element in the file
-                          ::m/tags])
-         (fn [v]
-           (let [has? (partial contains? v)]
-             (and (not-every? has? #{:system    :systems})
-                  (not-every? has? #{:user      :users})
-                  (not-every? has? #{:datastore :datastores})
-                  (not-every? has? #{:datatype  :datatypes}))))))
-
-(s/def ::file-map-yaml-string
-  (s/with-gen
-    ;; This spec exists mainly for the use of its generator, so valid inputs can
-    ;; be generated and passed to parse-model-file during generative testing.
-    ;; That said, the predicate also needs to be able to reject obviously
-    ;; invalid values, so as to make the conformance of the generated args
-    ;; accurate during generative testing. In other words, the specs in the
-    ;; fdef for parse-model-file include an s/or, which will sort of “classify”
-    ;; an argument according to the first spec that it validates against, so we
-    ;; need values like "" and "foo" to be invalid as per this spec.
-    (s/and string?
-           (fn [v] (some #(starts-with? v %) ["system" "user" "datastore"])))
-    #(gen/fmap yaml/generate-string (s/gen ::file-map))))
 
 (defn- postprocess-keys
   "First qualify each keyword key using the fc4.model namespace. Then check if a corresponding spec
@@ -120,19 +71,10 @@
   :fn   (fn [{{arg :parsed} :args, ret :ret}]
           (= (first arg) (first ret))))
 
-(def ^:private dsl-to-model-maps-singular
-  {:system    ::m/systems
-   :user      ::m/users
-   :datastore ::m/datastores})
-
-(def ^:private dsl-to-model-maps-plural
+(def ^:private dsl-to-model-maps
   {:systems    ::m/systems
    :users      ::m/users
    :datastores ::m/datastores})
-
-(def ^:private dsl-to-model-maps
-  (merge dsl-to-model-maps-singular
-         dsl-to-model-maps-plural))
 
 (defn add-file-map
   "Adds the elements from a parsed DSL file to a model. If any of the elements in the file-map are

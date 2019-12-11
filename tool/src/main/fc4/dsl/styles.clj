@@ -1,4 +1,4 @@
-(ns fc4.styles
+(ns fc4.dsl.styles
   (:require [clj-yaml.core           :as yaml]
             [clojure.spec.alpha      :as s]
             [clojure.spec.gen.alpha  :as gen]
