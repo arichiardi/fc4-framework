@@ -1,4 +1,4 @@
-(ns fc4.model.dsl-test
+(ns fc4.dsl.model-test
   (:require [clojure.test :refer [deftest]]
             [fc4.dsl.model :as dm]
             [fc4.test-utils :refer [check]]))
