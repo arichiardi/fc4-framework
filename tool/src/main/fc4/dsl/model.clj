@@ -3,9 +3,17 @@
             [clojure.spec.alpha :as s]
             [clojure.spec.gen.alpha :as gen]
             [clojure.string :refer [starts-with?]]
-            [fc4.spec :as fs]))
+            [cognitect.anomalies :as anom]
+            [expound.alpha :as expound :refer [expound-str]]
+            [fc4.spec :as fs]
+            [fc4.util :as u :refer [add-ns fault fault? update-all]]
+            [fc4.yaml :as fy :refer [split-file]]
+            [medley.core :refer [deep-merge map-vals]])
+   (:import [org.yaml.snakeyaml.parser ParserException]))
 
-(s/def ::description ::fs/non-blank-str) ;; Could reasonably have linebreaks.
+(alias 'fc4.model 'm)
+
+(s/def ::m/description ::fs/non-blank-str) ;; Could reasonably have linebreaks.
 (s/def ::comment ::fs/non-blank-str) ;; Could reasonably have linebreaks.
 
 (s/def ::simple-strings
@@ -136,7 +144,10 @@
 (s/def ::datastores (s/map-of ::name ::datastore-map :gen-max 3))
 (s/def ::datatypes  (s/map-of ::name ::datatype-map  :gen-max 3))
 
-;;;; “Root map” of model YAML files:
+;; “Root map” of model YAML files. This is slightly different from a model, in that:
+;; * A model file may contain only a single root key, whereas a model must have all the root keys
+;; * A model file may contain a root-level tags key, to be applied to every element in the file,
+;;   but a model doesn’t support this
 (s/def ::file-map
   (s/keys :req-un [(or ::systems ::users ::datastores ::datatypes)]
           :opt-un [::systems ::users ::datastores ::datatypes
@@ -156,3 +167,63 @@
     (s/and string?
            (fn [v] (some #(starts-with? v %) ["systems" "users" "datastores"])))
     #(gen/fmap yaml/generate-string (s/gen ::file-map))))
+
+(defn- postprocess-keys
+  "First qualify each keyword key using the fc4.dsl.model namespace. Then check if a corresponding
+  spec exists for the resulting qualified keyword. If it does, then replace the key with the
+  qualified key. If it does not, then use the string version of the keyword, because it’s not a
+  “keyword” of the DSL, so it’s probably a name or a tag name (key)."
+  [m]
+  (update-all
+   (fn [[k v]]
+     (let [qualified (add-ns "fc4.dsl.model" k)]
+       (if (s/get-spec qualified)
+         [qualified v]
+         [(name k) v])))
+   m))
+
+(defn parse-file
+  "Given a YAML model file as a string, parses it, and qualifies all map keys
+  except those at the root so that the result has a chance of being a valid
+  ::file-map. If a file contains “top matter” then only the main document is
+  parsed. Performs very minimal validation. If the file contains malformed YAML,
+  or does not contain a map, an anomaly will be returned."
+  [file-contents]
+  (try
+    (let [parsed (-> (split-file file-contents)
+                     (::fy/main)
+                     (yaml/parse-string))]
+      (if (associative? parsed)
+        (map-vals postprocess-keys parsed)
+        (fault "Root data structure must be a map (mapping).")))
+    (catch ParserException e
+      (fault (str "YAML could not be parsed: error " e)))))
+
+(s/fdef parse-file
+  :args (s/cat :v (s/alt :valid-and-well-formed ::file-map-yaml-string
+                         :invalid-or-malformed  string?))
+  :ret  (s/or :valid-and-well-formed ::file-map
+              :invalid-or-malformed  ::anom/anomaly)
+  :fn   (fn [{{arg :v} :args, ret :ret}]
+          (= (first arg) (first ret))))
+
+(defn validate-parsed-file
+  "Returns either an error message as a string or nil."
+  [parsed]
+  (cond
+    (s/valid? ::file-map parsed)
+    nil
+
+    (fault? parsed)
+    (::anom/message parsed)
+
+    :else
+    (expound-str ::file-map parsed)))
+
+(s/fdef validate-parsed-file
+  :args (s/cat :parsed (s/alt :valid   ::file-map
+                              :invalid map?))
+  :ret  (s/or                 :valid   nil?
+                              :invalid string?)
+  :fn   (fn [{{arg :parsed} :args, ret :ret}]
+          (= (first arg) (first ret))))
