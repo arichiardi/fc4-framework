@@ -2,7 +2,7 @@
   (:require [clj-yaml.core :as yaml]
             [clojure.spec.alpha :as s]
             [clojure.spec.gen.alpha :as gen]
-            [com.gfredericks.test.chuck.generators :refer [string-from-regex]]
+            [com.gfredericks.test.chuck.generators :as gen' :refer [string-from-regex]]
             [fc4.integrations.structurizr.express.yaml :as seyaml]
             [fc4.spec :as fs]
             [fc4.util :as fu :refer [namespaces]]

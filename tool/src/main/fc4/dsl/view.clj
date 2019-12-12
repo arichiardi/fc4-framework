@@ -16,7 +16,13 @@
 ;; to qualify them all with _the same_ namespace. Thus, that namespace needs to
 ;; include definitions for -all- the keys that appear in the YAML files.
 (s/def ::v/name ::fs/short-non-blank-simple-str)
-(s/def ::v/subject ::v/name)
+
+;; View subject reference
+(s/def ::v/system ::v/name)
+(s/def ::v/user ::v/name)
+(s/def ::v/datastore ::v/name)
+(s/def ::v/datatype ::v/name)
+
 (s/def ::v/description ::fs/description)
 
 (s/def ::v/coord-pair (s/coll-of ::fs/coord-int :count 2))
@@ -62,7 +68,8 @@
 
 (s/def :fc4/view
   (s/keys
-   :req [::v/subject ::v/positions ::v/control-points ::v/size]
+   :req [(or ::v/system ::v/user ::v/datastore ::v/datatype)
+         ::v/positions ::v/control-points ::v/size]
    :opt [::v/description]))
 
 (defn parse-file
