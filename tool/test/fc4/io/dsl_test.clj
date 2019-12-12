@@ -1,4 +1,4 @@
-(ns fc4.io.model.dsl-test
+(ns fc4.io.dsl-test
   (:require [clojure.java.io      :as f :refer [file]]
             [clojure.spec.alpha   :as s]
             [clojure.test         :as ct :refer [deftest is testing]]

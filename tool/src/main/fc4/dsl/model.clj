@@ -6,13 +6,12 @@
             [cognitect.anomalies :as anom]
             [expound.alpha :as expound :refer [expound-str]]
             [fc4.spec :as fs]
-            [fc4.util :as u :refer [add-ns fault fault? update-all]]
+            [fc4.util :as u :refer [add-ns fault fault? namespaces update-all]]
             [fc4.yaml :as fy :refer [split-file]]
-            [medley.core :refer [deep-merge map-vals]])
+            [medley.core :refer [deep-merge]])
    (:import [org.yaml.snakeyaml.parser ParserException]))
 
-(do (create-ns 'fc4.model)
-    (alias 'm 'fc4.model))
+(namespaces ['fc4.model :as 'm])
 
 (s/def ::m/description ::fs/non-blank-str) ;; Could reasonably have linebreaks.
 (s/def ::m/comment ::fs/non-blank-str) ;; Could reasonably have linebreaks.

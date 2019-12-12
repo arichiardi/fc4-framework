@@ -5,8 +5,8 @@
             ; This ns is required solely for the side fx of loading the file:
             ; registering the desired specs in the spec registry.
             [fc4.integrations.structurizr.express.spec]
-            [fc4.spec               :as fs]
-            [fc4.util               :as util]))
+            [fc4.spec                :as fs]
+            [fc4.util                :as util]))
 
 (s/def ::background :structurizr.style/background)
 (s/def ::border :structurizr.style/border)

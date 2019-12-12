@@ -1,6 +1,6 @@
-(ns fc4.view-test
+(ns fc4.dsl.view-test
   (:require [clojure.test :refer [deftest is]]
-            [fc4.view :as v]
+            [fc4.dsl.view :as v]
             [fc4.test-utils :refer [check]]))
 
 (deftest view-from-file (check `v/view-from-file 1000))

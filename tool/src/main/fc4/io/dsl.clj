@@ -1,17 +1,13 @@
-(ns fc4.io.model.dsl
+(ns fc4.io.dsl
   "Provides all I/O facilities so that the other namespaces can be pure. The
   function specs are provided as a form of documentation and for instrumentation
   during development. They should not be used for generative testing."
-  (:require [clj-yaml.core           :as yaml]
-            [clojure.java.io         :refer [file]]
-            [clojure.spec.alpha      :as s]
-            [clojure.spec.gen.alpha  :as gen]
-            [clojure.string          :as str :refer [ends-with?]]
+  (:require [clojure.spec.alpha      :as s]
             [cognitect.anomalies     :as anom]
             [expound.alpha           :as expound :refer [expound-str]]
-            [fc4.model.dsl                 :as dsl :refer [parse-model-file]]
+            [fc4.dsl.model           :as dsl :refer [parse-file]]
             [fc4.io.yaml             :as ioy :refer [yaml-files]]
-            [fc4.model               :as m]
+            ; [fc4.model               :as m]
             [fc4.spec                :as fs]
             [fc4.styles              :as st :refer [styles-from-file]]
             [fc4.util                :as u :refer [fault]]
