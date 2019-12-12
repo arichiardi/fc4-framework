@@ -2,9 +2,7 @@
   (:require [clj-yaml.core           :as yaml]
             [clojure.spec.alpha      :as s]
             [clojure.spec.gen.alpha  :as gen]
-            ; This ns is required solely for the side fx of loading the file:
-            ; registering the desired specs in the spec registry.
-            [fc4.integrations.structurizr.express.spec]
+            [fc4.integrations.structurizr.express.spec] ; for side effect: register specs
             [fc4.spec                :as fs]
             [fc4.util                :as util]))
 
@@ -58,7 +56,7 @@
   :args (s/cat :file-contents ::yaml-file-contents)
   :ret  ::styles
   :fn   (fn [{{:keys [file-contents]} :args, ret :ret}]
-                ;; Unlike the similar function fc4.view/view-from-file, this
+                ;; Unlike the similar function fc4.view/parse-file, this
                 ;; needs to parse the strings back from the YAML back into (in
                 ;; this case) seqs of ordered maps because otherwise the YAML
                 ;; string serializations of the data structures were using

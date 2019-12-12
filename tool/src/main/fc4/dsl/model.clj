@@ -6,14 +6,14 @@
             [cognitect.anomalies :as anom]
             [expound.alpha :as expound :refer [expound-str]]
             [fc4.spec :as fs]
-            [fc4.util :as u :refer [add-ns fault fault? namespaces update-all]]
+            [fc4.util :as u :refer [fault fault?]]
             [fc4.yaml :as fy :refer [split-file]]
             [medley.core :refer [deep-merge]])
    (:import [org.yaml.snakeyaml.parser ParserException]))
 
-(namespaces ['fc4.model :as 'm])
+(u/namespaces '[fc4.model :as m])
 
-(s/def ::m/description ::fs/non-blank-str) ;; Could reasonably have linebreaks.
+(s/def ::m/description ::fs/description) ;; Could reasonably have linebreaks.
 (s/def ::m/comment ::fs/non-blank-str) ;; Could reasonably have linebreaks.
 
 (s/def ::m/simple-strings
@@ -172,20 +172,6 @@
            (fn [v] (some #(starts-with? v %) ["systems" "users" "datastores"])))
     #(gen/fmap yaml/generate-string (s/gen ::file))))
 
-(defn- qualify-known-keys
-  "First qualify each keyword key using the fc4.dsl.model namespace. Then check if a corresponding
-  spec exists for the resulting qualified keyword. If it does, then replace the key with the
-  qualified key. If it does not, then use the string version of the keyword, because it’s not a
-  “keyword” of the DSL, so it’s probably a name or a tag name (key)."
-  [m]
-  (update-all
-   (fn [[k v]]
-     (let [qualified (add-ns "fc4.model" k)]
-       (if (s/get-spec qualified)
-         [qualified v]
-         [(name k) v])))
-   m))
-
 (defn parse-file
   ;; TODO: apply the contents of the root-level :tags key to every element in the file, then remove
   ;; that root-level :tags key.
@@ -199,7 +185,7 @@
                      (::fy/main)
                      (yaml/parse-string))]
       (if (associative? parsed)
-        (qualify-known-keys parsed)
+        (u/qualify-known-keys 'fc4.model parsed)
         (fault "Root data structure must be a map (mapping).")))
     (catch ParserException e
       (fault (str "YAML could not be parsed: error " e)))))

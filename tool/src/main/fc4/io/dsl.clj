@@ -12,7 +12,7 @@
             [fc4.styles              :as st :refer [styles-from-file]]
             [fc4.util                :as u :refer [fault]]
             [fc4.yaml                :as fy :refer [split-file]]
-            [fc4.view                :as v :refer [view-from-file]]
+            [fc4.view                :as v :refer [parse-file]]
             [medley.core                   :refer [map-vals remove-vals]])
   (:import [java.io FileNotFoundException]))
 
@@ -97,7 +97,7 @@
   (-> (slurp file-path)
       (split-file)
       (get ::fy/main)
-      (view-from-file)
+      (parse-file)
       (val-or-error ::v/view)))
 
 (s/fdef read-view

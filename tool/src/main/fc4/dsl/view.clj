@@ -2,10 +2,12 @@
   (:require [clj-yaml.core           :as yaml]
             [clojure.spec.alpha      :as s]
             [clojure.spec.gen.alpha  :as gen]
+            [fc4.integrations.structurizr.express.spec] ; for side effect: register specs
             [fc4.spec                :as fs]
-            [fc4.util                :as util :refer [namespaces]]))
+            [fc4.util                :as u]))
 
-(namespaces ['fc4.view :as 'v])
+(u/namespaces '[fc4.view :as v]
+              '[structurizr.diagram :as sd])
 
 ;; You might ask: why copy specs over from a different namespace? It’s because
 ;; when the views are parsed from YAML files and we end up with non-namespaced
@@ -16,10 +18,11 @@
 (s/def ::v/name ::fs/short-non-blank-simple-str)
 (s/def ::v/subject ::v/name)
 (s/def ::v/description ::fs/description)
-(s/def ::v/coord-string ::fs/coord-string)
 
-(s/def ::v/subject ::v/coord-string)
-(s/def ::v/position-map (s/map-of ::v/name ::v/coord-string :gen-max 2))
+(s/def ::v/coord-pair (s/coll-of ::fs/coord-int :count 2))
+
+(s/def ::v/subject ::v/coord-pair)
+(s/def ::v/position-map (s/map-of ::v/name ::v/coord-pair :gen-max 2))
 (s/def ::v/users ::v/position-map)
 (s/def ::v/containers ::v/position-map)
 (s/def ::v/other-systems ::v/position-map)
@@ -34,11 +37,11 @@
   ; suppose it might be handy if s/keys supported `not` but in this case that’s
   ; not needed.) (Another possible useful feature for s/keys could be something
   ; like `one-of` as in “only one of”.)
-   :req [(and ::subject (or ::users ::containers ::other-systems))]
-   :opt [::users ::containers ::other-systems]))
+   :req [(and ::v/subject (or ::v/users ::v/containers ::v/other-systems))]
+   :opt [::v/users ::v/containers ::v/other-systems]))
 
 (s/def ::v/control-point-seqs
-  (s/coll-of (s/coll-of ::v/coord-string :min-count 1 :gen-max 3)
+  (s/coll-of (s/coll-of ::v/coord-pair :min-count 1 :gen-max 3)
              :min-count 1
              :gen-max 3))
 
@@ -55,85 +58,25 @@
    :req [::v/system-context]
    :opt [::v/container]))
 
-(s/def ::size
-  ;; These options come from Structurizr Express, because that’s our current renderer. And yeah,
-  ;; that’s leaking an implementation detail through, but I can’t think of a way to avoid this. The
-  ;; same applies to styles. I suppose that means we might need to support these values forever, but
-  ;; I think maybe we can live with that.
-  ;; If you’re wondering why this doesn’t just reference the same value over in
-  ;; src/main/fc4/integrations/structurizr/express/spec.clj, it’s because I don’t want this lib to
-  ;; depend on that lib, because this lib is part of the “core” fc4 code while that lib is part of
-  ;; an “integration” that may have a shorter shelf-life. I also don’t want to load all that code
-  ;; at runtime when it’s not really needed.
-  #{"A2_Landscape"
-    "A2_Portrait"
-    "A3_Landscape"
-    "A3_Portrait"
-    "A4_Landscape"
-    "A4_Portrait"
-    "A5_Landscape"
-    "A5_Portrait"
-    "A6_Landscape"
-    "A6_Portrait"
-    "Legal_Landscape"
-    "Legal_Portrait"
-    "Letter_Landscape"
-    "Letter_Portrait"
-    "Slide_16_9"
-    "Slide_4_3"})
+(s/def ::v/size ::sd/size)
 
 (s/def :fc4/view
   (s/keys
    :req [::v/subject ::v/positions ::v/control-points ::v/size]
    :opt [::v/description]))
 
-(defn- fixup-keys
-  "Finds any keyword keys that contain spaces and/or capital letters and
-  replaces them with their string versions, because any such value is likely to
-  be an element name, and we need those to be strings."
-  [view]
-  (util/update-all
-   (fn [[k v]]
-     (if (and (keyword? k)
-              (re-seq #"[A-Z ]" (name k)))
-       [(name k) v]
-       [k v]))
-   view))
-
-(s/fdef fixup-keys
-  :args (s/cat :m (s/map-of ::fs/unqualified-keyword any?))
-  :ret  (s/map-of (s/or :keyword keyword? :string string?) any?)
-  :fn   (fn [{{m :m} :args, ret :ret}]
-          (and (= (count m) (count ret))
-               (empty? (->> (keys ret)
-                            (filter keyword?)
-                            (map name)
-                            (filter #(re-seq #"[A-Z ]" %)))))))
-
-; We have to capture this at compile time in order for it to have the value we
-; want it to; if we referred to *ns* in the body of a function then, because it
-; is dynamically bound, it would return the namespace at the top of the stack,
-; the “currently active namespace” rather than what we want, which is the
-; namespace of this file, because that’s the namespace all our keywords are
-; qualified with.
-(def ^:private this-ns-name (str *ns*))
-
-(defn view-from-file
+(defn parse-file
   "Parses the contents of a YAML file, then processes those contents such that
-  the result conforms to ::view."
+  the result conforms to :fc4/view."
   [file-contents]
-  (-> (yaml/parse-string file-contents)
-      ;; Both the below functions do a walk through the view; this is
-      ;; redundant, duplicative, inefficient, and possibly slow. So this right
-      ;; here is a potential spot for optimization.
-      (fixup-keys)
-      (util/qualify-keys this-ns-name)))
+  (->> (yaml/parse-string file-contents)
+       (u/qualify-known-keys 'fc4.view)))
 
-(s/def ::v/yaml-file-contents
+(s/def ::v/yaml-file-string
   (s/with-gen
     ::fs/non-blank-str
     #(gen/fmap yaml/generate-string (s/gen :fc4/view))))
 
-(s/fdef view-from-file
-  :args (s/cat :file-contents ::v/yaml-file-contents)
-  :ret  ::view)
+(s/fdef parse-file
+  :args (s/cat :file-contents ::v/yaml-file-string)
+  :ret  :fc4/view)

@@ -9,25 +9,26 @@
   (s/+ (s/tuple simple-symbol? #{:as} simple-symbol?)))
 
 ;; TODO: consider making this a macro so the ns-symbols won’t have to be quoted
-;; when calling them. Also so maybe the alias will be created in the correct namespace, so maybe
-;; linters will be happier.
-; (defn namespaces
-;   "Pass one or more tuples of namespaces to create along with aliases:
-;   (namespaces '[foo :as f] '[bar :as b])"
-;   [t & ts] ; At least one tuple is required.
-;   {:pre [(s/valid? ::ns-tuples (concat [t] ts))]}
-;   (doseq [[ns-sym _ alias-sym] (concat [t] ts)]
-;     (create-ns ns-sym)
-;     (alias alias-sym ns-sym)))
-
-(defmacro namespaces
+;; when calling them.
+(defn namespaces
   "Pass one or more tuples of namespaces to create along with aliases:
   (namespaces '[foo :as f] '[bar :as b])"
   [t & ts] ; At least one tuple is required.
-  ; {:pre [(s/valid? ::ns-tuples (concat [t] ts))]}
-  `(doseq [[ns-sym# _ alias-sym#] (concat [t] ts)]
-     (create-ns ns-sym#)
-     (alias alias-sym ns-sym#)))
+  {:pre [(s/valid? ::ns-tuples (cons t ts))]}
+  ;; clj-kondo is issuing a spurious warning about this first line: unused binding alias-sym
+  ;; — this is due to a bug in clj-kondo: https://github.com/borkdude/clj-kondo/issues/649
+  (doseq [[ns-sym _ alias-sym] (cons t ts)]
+    (create-ns ns-sym)
+    (alias alias-sym ns-sym)))
+
+; (defmacro namespaces
+;   "Pass one or more tuples of namespaces to create along with aliases:
+;   (namespaces '[foo :as f] '[bar :as b])"
+;   [t & ts] ; At least one tuple is required.
+;   ; {:pre [(s/valid? ::ns-tuples (concat [t] ts))]}
+;   `(doseq [[ns-sym# _ alias-sym#] (concat [t] ts)]
+;      (create-ns ns-sym#)
+;      (alias alias-sym ns-sym#)))
 
 ; This spec is here for documentation and instrumentation; don’t do any
 ; generative testing with this spec because this function has side effects (and
@@ -86,6 +87,21 @@
   :args (s/cat :map (s/map-of keyword? any?)
                :ns-name ::fs/non-blank-simple-str)
   :ret  (s/map-of qualified-keyword? any?))
+
+;; TODO: SPEC
+(defn qualify-known-keys
+  "Qualifies each keyword key using the supplied namespace, then checks if a corresponding spec
+  exists for the resulting qualified keyword. If it does, then it replaces the key with the
+  qualified key. If it does not, then use the string version of the keyword, because it’s not a
+  “keyword” of the DSL, so it’s probably a name or a tag name (key)."
+  [the-ns m]
+  (update-all
+   (fn [[k v]]
+     (let [qualified (add-ns (str (name the-ns)) k)]
+       (if (s/get-spec qualified)
+         [qualified v]
+         [(name k) v])))
+   m))
 
 ; Rebind for testing. See docstring of `fail` below for explanation.
 (def ^:dynamic *throw-on-fail* true)
