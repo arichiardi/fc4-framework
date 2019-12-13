@@ -11,7 +11,8 @@
             [medley.core :refer [deep-merge]])
    (:import [org.yaml.snakeyaml.parser ParserException]))
 
-(u/namespaces '[fc4.model :as m])
+(u/namespaces '[fc4 :as f]
+              '[fc4.model :as m])
 
 (s/def ::m/description ::fs/description) ;; Could reasonably have linebreaks.
 (s/def ::m/comment ::fs/non-blank-str) ;; Could reasonably have linebreaks.
@@ -138,13 +139,13 @@
   (s/merge ::m/element
            (s/keys :opt [::m/repos ::m/datastore])))
 
-;; Root-level keys — for both an :fc4/model and a ::file.
+;; Root-level keys — for both an ::f/model and a ::file.
 (s/def ::m/systems    (s/map-of ::m/name ::m/system-map    :gen-max 3))
 (s/def ::m/users      (s/map-of ::m/name ::m/user-map      :gen-max 3))
 (s/def ::m/datastores (s/map-of ::m/name ::m/datastore-map :gen-max 3))
 (s/def ::m/datatypes  (s/map-of ::m/name ::m/datatype-map  :gen-max 3))
 
-(s/def :fc4/model
+(s/def ::f/model
   (s/keys :req [::m/systems ::m/users ::m/datastores ::m/datatypes]))
 
 ;; “Root map” of model DSL YAML files. This is similar to a model, with these differences:
@@ -249,14 +250,14 @@
 
 (s/fdef build-model
   :args (s/cat :in (s/coll-of ::file :gen-max 10))
-  :ret  (s/or :success :fc4/model
+  :ret  (s/or :success ::f/model
               :failure ::anom/anomaly)
   :fn   (fn [{{:keys [in]}      :args
               [ret-tag ret-val] :ret}]
           (and
            ; I saw, at least once, a case wherein the return value was both a valid model *and* a
            ; valid anomaly. We don’t want this.
-           (not (and (s/valid? :fc4/model ret-val)
+           (not (and (s/valid? ::f/model ret-val)
                      (s/valid? ::anom/anomaly  ret-val)))
            (case ret-tag
              :success

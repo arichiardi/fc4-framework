@@ -1,10 +1,11 @@
 (ns fc4.io.dsl-test
-  (:require [clojure.java.io      :as f :refer [file]]
+  (:require [clojure.java.io             :refer [file]]
             [clojure.spec.alpha   :as s]
             [clojure.test         :as ct :refer [deftest is testing]]
             [cognitect.anomalies  :as anom]
             [expound.alpha        :as ex :refer [expound-str]]
-            [fc4.io.dsl           :as dsl])
+            [fc4.io.dsl           :as dsl]
+            [fc4.util             :as u])
   (:import [java.io FileNotFoundException]))
 
 (u/namespaces '[fc4 :as f])

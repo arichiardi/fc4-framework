@@ -6,7 +6,8 @@
             [fc4.spec                :as fs]
             [fc4.util                :as u]))
 
-(u/namespaces '[fc4.view :as v]
+(u/namespaces '[fc4 :as f]
+              '[fc4.view :as v]
               '[structurizr.diagram :as sd])
 
 ;; You might ask: why copy specs over from a different namespace? It’s because
@@ -66,7 +67,7 @@
 
 (s/def ::v/size ::sd/size)
 
-(s/def :fc4/view
+(s/def ::f/view
   (s/keys
    :req [(or ::v/system ::v/user ::v/datastore ::v/datatype)
          ::v/positions ::v/control-points ::v/size]
@@ -74,7 +75,7 @@
 
 (defn parse-file
   "Parses the contents of a YAML file, then processes those contents such that
-  the result conforms to :fc4/view."
+  the result conforms to ::f/view."
   [file-contents]
   (->> (yaml/parse-string file-contents)
        (u/qualify-known-keys 'fc4.view)))
@@ -82,8 +83,8 @@
 (s/def ::v/yaml-file-string
   (s/with-gen
     ::fs/non-blank-str
-    #(gen/fmap yaml/generate-string (s/gen :fc4/view))))
+    #(gen/fmap yaml/generate-string (s/gen ::f/view))))
 
 (s/fdef parse-file
   :args (s/cat :file-contents ::v/yaml-file-string)
-  :ret  :fc4/view)
+  :ret  ::f/view)

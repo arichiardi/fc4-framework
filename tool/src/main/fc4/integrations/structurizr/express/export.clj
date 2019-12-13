@@ -10,7 +10,8 @@
             [fc4.spec             :as fs]
             [fc4.util             :as fu :refer [namespaces update-all]]))
 
-(namespaces '[fc4.model :as m]
+(namespaces '[fc4 :as f]
+            '[fc4.model :as m]
             '[fc4.styles :as ss]
             '[fc4.view :as v]
             '[structurizr :as st])
@@ -28,7 +29,7 @@
 
 (s/fdef sys-position
   :args (s/cat :sys-name ::m/name
-               :view     :fc4/view)
+               :view     ::f/view)
   :ret  ::st/coord-string)
 
 (defn- add-in-house-tag
@@ -124,8 +125,8 @@
 
 (s/fdef sys-elem
   :args (s/cat :sys-name ::m/name
-               :view     :fc4/view
-               :model    :fc4/model)
+               :view     ::f/view
+               :model    ::f/model)
   :ret  (s/nilable ::st/system)
   :fn   (fn [{{:keys [:sys-name :model]} :args, ret :ret}]
           (if (get-in model [::m/systems sys-name])
@@ -152,8 +153,8 @@
 
 (s/fdef person-elem
   :args (s/cat :user-name ::m/name
-               :view      :fc4/view
-               :model     :fc4/model)
+               :view      ::f/view
+               :model     ::f/model)
   :ret  (s/nilable ::st/person)
   :fn   (fn [{{:keys [user-name model]} :args, ret :ret}]
           (if (get-in model [::m/users user-name])
@@ -177,7 +178,7 @@
 
 (s/fdef deps-of
   :args (s/cat :system ::m/system-map
-               :model  :fc4/model)
+               :model  ::f/model)
   :ret  (s/coll-of ::m/system-ref))
 
 (defn- users-of
@@ -237,8 +238,8 @@
       (get-in model [::m/systems (keyword subject-name)])))
 
 (s/fdef get-subject
-  :args (s/cat :view :fc4/view
-               :model :fc4/model)
+  :args (s/cat :view ::f/view
+               :model ::f/model)
   :ret  ::m/system-map)
 
 (defn- elements
@@ -253,8 +254,8 @@
     (concat person-elems sys-elems)))
 
 (s/fdef elements
-  :args (s/cat :view  :fc4/view
-               :model :fc4/model)
+  :args (s/cat :view  ::f/view
+               :model ::f/model)
   :ret  (s/coll-of ::st/element))
 
 (defn- relationship-with
@@ -324,7 +325,7 @@
 
 (s/fdef add-control-points
   :args (s/cat :rels ::relationships-without-vertices
-               :view :fc4/view)
+               :view ::f/view)
   :ret  :structurizr.diagram/relationships
   :fn   (fn [{{in-rels :rels
                view    :view} :args
@@ -364,8 +365,8 @@
         (distinct))))
 
 (s/fdef relationships
-  :args (s/cat :view :fc4/view
-               :model :fc4/model)
+  :args (s/cat :view ::f/view
+               :model ::f/model)
   :ret  :structurizr.diagram/relationships
   :fn   (fn [{{:keys [view model]} :args
               ret                  :ret}]
@@ -413,7 +414,7 @@
     :size (::v/size view)}))
 
 (s/fdef view->system-context
-  :args (s/cat :view :fc4/view
+  :args (s/cat :view ::f/view
                      ; TODO: rather than just a model that is merely *valid*
                      ; as in it conforms with its spec, we should probably
                      ; ensure that what gets passed in *makes sense*. I mean...
@@ -423,7 +424,7 @@
                      ; that’s what it expects, and therefore it can just throw
                      ; an exception (or return an anomaly) if something in it
                      ; does NOT make sense.
-               :model :fc4/model
+               :model ::f/model
                :styles ::f/styles)
   :ret  (s/or :success ::st/diagram
               :error   ::anom/anomaly))

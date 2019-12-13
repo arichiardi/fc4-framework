@@ -5,15 +5,26 @@ links:
 system: Middle
 description: Ao
 positions:
-  subject: 3, 7
-  containers: {Front: '3, 9', Internal: '16, 13', Back: '001,5'}
-  other-systems: {Mobile: '4,9593', External: '59,234', Foo: '33,33', Front: '74, 67', Internal: '88,8'}
+  subject: [3, 7]
+  containers:
+    Front: [3, 9]
+    Internal: [16, 13]
+    Back: [1,5]
+  other-systems:
+    Mobile: [4, 9593]
+    External: [59, 234]
+    Foo: [33, 33]
+    Front: [74, 67]
+    Internal: [88, 8]
 control-points:
   system-context:
     Front:
-    - ['196, 73', '169,48', '446,59']
-    - ['79,3', '559, 6770', '19, 9396']
+      - [[196, 73], [169,48], [446,59]]
+      - [[79,3], [559, 6770], [19, 9396]]
   container:
     Front:
-      Mobile: [['79,3', '559, 6770', '19, 9396']]
+      Mobile:
+        - [79, 3]
+        - [559, 6770]
+        - [19, 9396]
 size: A3_Landscape
