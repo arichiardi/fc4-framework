@@ -14,6 +14,8 @@
             [fc4.yaml                :as fy  :refer [split-file]]
             [medley.core                     :refer [map-vals remove-vals]]))
 
+(u/namespaces '[fc4 :as f])
+
 (defn- read-model-files
   "Recursively find, read, and parse YAML files under a directory tree. If a
   file contains “top matter” then only the main document is parsed. Performs
@@ -83,11 +85,11 @@
       (assoc (fault (uber-error-message validation-results))
              ::details validation-results)
       (val-or-error (m/build-model (map second model-files))
-                    ::m/model))))
+                    ::f/model))))
 
 (s/fdef read-model
   :args (s/cat :root-path ::fs/dir-path)
-  :ret  (s/or :success ::m/model
+  :ret  (s/or :success ::f/model
               :failure ::error))
 
 (defn read-view
@@ -96,11 +98,11 @@
       (split-file)
       (get ::fy/main)
       (v/parse-file)
-      (val-or-error ::v/view)))
+      (val-or-error ::f/view)))
 
 (s/fdef read-view
   :args (s/cat :file-path ::fs/file-path-str)
-  :ret  (s/or :success ::v/view
+  :ret  (s/or :success ::f/view
               :error   ::error))
 
 (defn read-styles
@@ -109,11 +111,11 @@
       (split-file)
       (get ::fy/main)
       (st/parse-file)
-      (val-or-error :fc4/styles)))
+      (val-or-error ::f/styles)))
 
 (s/fdef read-styles
   :args (s/cat :file-path ::fs/file-path-str)
-  :ret  (s/or :success :fc4/styles
+  :ret  (s/or :success ::f/styles
               :error   ::error))
 
 (comment

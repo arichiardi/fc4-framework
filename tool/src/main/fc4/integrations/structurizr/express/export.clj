@@ -391,8 +391,8 @@
    styles))
 
 (s/fdef rename-internal-tag
-  :args (s/cat :styles ::ss/styles)
-  :ret  ::ss/styles
+  :args (s/cat :styles ::f/styles)
+  :ret  ::f/styles
   :fn (fn [{{in-styles :styles} :args, out-styles :ret}]
         (every? true?
                 (map (fn [in-style out-style]
@@ -424,6 +424,6 @@
                      ; an exception (or return an anomaly) if something in it
                      ; does NOT make sense.
                :model :fc4/model
-               :styles ::ss/styles)
+               :styles ::f/styles)
   :ret  (s/or :success ::st/diagram
               :error   ::anom/anomaly))

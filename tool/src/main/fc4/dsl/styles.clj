@@ -6,7 +6,8 @@
             [fc4.spec                :as fs]
             [fc4.util                :as u]))
 
-(u/namespaces '[fc4.styles :as ss]
+(u/namespaces '[fc4 :as f]
+              '[fc4.styles :as ss]
               '[structurizr.style :as sy])
 
 (s/def ::ss/background ::sy/background)
@@ -19,16 +20,16 @@
 (s/def ::ss/type ::sy/type)
 (s/def ::ss/width ::sy/width)
 
-(s/def :fc4/style
+(s/def ::f/style
   (s/keys
    :req [::ss/type ::ss/tag]
    :opt [::ss/background ::ss/border ::ss/color ::ss/dashed ::ss/height ::ss/shape ::ss/width]))
 
-(s/def :fc4/styles (s/coll-of :fc4/style :min-count 1 :gen-max 30))
+(s/def ::f/styles (s/coll-of ::f/style :min-count 1 :gen-max 30))
 
 (defn parse-file
   "Parses the contents of a YAML file, then processes those contents such that
-  they conform to :fc4/style."
+  they conform to ::f/style."
   [file-contents]
   ;; We could really just pass the entire file contents into qualify-keys,
   ;; as it operates recursively on any and all nested Clojure data
@@ -45,11 +46,11 @@
 (s/def ::yaml-file-str
   (s/with-gen
     ::fs/non-blank-str
-    #(gen/fmap yaml/generate-string (s/gen :fc4/styles))))
+    #(gen/fmap yaml/generate-string (s/gen ::f/styles))))
 
 (s/fdef parse-file
   :args (s/cat :file-contents ::yaml-file-str)
-  :ret  :fc4/styles
+  :ret  ::f/styles
   :fn   (fn [{{:keys [file-contents]} :args, ret :ret}]
                 ;; Unlike the similar function fc4.view/parse-file, this
                 ;; needs to parse the strings back from the YAML back into (in
