@@ -9,7 +9,7 @@
             [fc4.util :as u :refer [fault fault?]]
             [fc4.yaml :as fy :refer [split-file]]
             [medley.core :refer [deep-merge]])
-   (:import [org.yaml.snakeyaml.parser ParserException]))
+  (:import [org.yaml.snakeyaml.parser ParserException]))
 
 (u/namespaces '[fc4 :as f]
               '[fc4.model :as m])
