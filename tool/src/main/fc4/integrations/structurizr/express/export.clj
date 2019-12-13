@@ -4,7 +4,7 @@
             [clojure.spec.alpha   :as s]
             [clojure.string       :as string :refer [includes? join]]
             [fc4.dsl.model] ; for size fx: register specs
-            [fc4.dsl.styles] ; for size fx: register specs
+            [fc4.dsl.style] ; for size fx: register specs
             [fc4.dsl.view] ; for size fx: register specs
             [fc4.integrations.structurizr.express.spec] ; for side fx: : register specs
             [fc4.spec             :as fs]

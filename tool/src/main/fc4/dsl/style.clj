@@ -1,4 +1,4 @@
-(ns fc4.dsl.styles
+(ns fc4.dsl.style
   (:require [clj-yaml.core           :as yaml]
             [clojure.spec.alpha      :as s]
             [clojure.spec.gen.alpha  :as gen]
@@ -7,23 +7,24 @@
             [fc4.util                :as u]))
 
 (u/namespaces '[fc4 :as f]
-              '[fc4.styles :as ss]
-              '[structurizr.style :as sy])
+              '[fc4.style :as fstyle]
+              '[structurizr.style :as sstyle])
 
-(s/def ::ss/background ::sy/background)
-(s/def ::ss/border ::sy/border)
-(s/def ::ss/color ::sy/color)
-(s/def ::ss/dashed ::sy/dashed)
-(s/def ::ss/height ::sy/height)
-(s/def ::ss/shape ::sy/shape)
-(s/def ::ss/tag ::sy/tag)
-(s/def ::ss/type ::sy/type)
-(s/def ::ss/width ::sy/width)
+(s/def ::fstyle/background ::sstyle/background)
+(s/def ::fstyle/border ::sstyle/border)
+(s/def ::fstyle/color ::sstyle/color)
+(s/def ::fstyle/dashed ::sstyle/dashed)
+(s/def ::fstyle/height ::sstyle/height)
+(s/def ::fstyle/shape ::sstyle/shape)
+(s/def ::fstyle/tag ::sstyle/tag)
+(s/def ::fstyle/type ::sstyle/type)
+(s/def ::fstyle/width ::sstyle/width)
 
 (s/def ::f/style
   (s/keys
-   :req [::ss/type ::ss/tag]
-   :opt [::ss/background ::ss/border ::ss/color ::ss/dashed ::ss/height ::ss/shape ::ss/width]))
+   :req [::fstyle/type ::fstyle/tag]
+   :opt [::fstyle/background ::fstyle/border ::fstyle/color ::fstyle/dashed ::fstyle/height
+         ::fstyle/shape ::fstyle/width]))
 
 (s/def ::f/styles (s/coll-of ::f/style :min-count 1 :gen-max 30))
 

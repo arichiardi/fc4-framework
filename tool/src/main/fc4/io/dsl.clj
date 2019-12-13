@@ -6,7 +6,7 @@
             [cognitect.anomalies     :as anom]
             [expound.alpha           :as expound :refer [expound-str]]
             [fc4.dsl.model           :as m]
-            [fc4.dsl.styles          :as st]
+            [fc4.dsl.style          :as st]
             [fc4.dsl.view            :as v]
             [fc4.io.yaml             :as ioy :refer [yaml-files]]
             [fc4.spec                :as fs]
