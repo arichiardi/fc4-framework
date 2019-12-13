@@ -2,7 +2,7 @@ what is this: A description of a software system, using the semantics of the FC4
 links:
   The FC4 Framework: https://fundingcircle.github.io/fc4-framework/
 ---
-system:
+systems:
   Mobile:
     description: m78Cq
     uses:

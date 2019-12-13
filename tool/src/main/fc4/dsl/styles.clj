@@ -4,36 +4,31 @@
             [clojure.spec.gen.alpha  :as gen]
             [fc4.integrations.structurizr.express.spec] ; for side effect: register specs
             [fc4.spec                :as fs]
-            [fc4.util                :as util]))
+            [fc4.util                :as u]))
 
-(s/def ::background :structurizr.style/background)
-(s/def ::border :structurizr.style/border)
-(s/def ::color :structurizr.style/color)
-(s/def ::dashed :structurizr.style/dashed)
-(s/def ::height :structurizr.style/height)
-(s/def ::shape :structurizr.style/shape)
-(s/def ::tag :structurizr.style/tag)
-(s/def ::type :structurizr.style/type)
-(s/def ::width :structurizr.style/width)
+(u/namespaces '[fc4.styles :as ss]
+              '[structurizr.style :as sy])
 
-(s/def ::style
+(s/def ::ss/background ::sy/background)
+(s/def ::ss/border ::sy/border)
+(s/def ::ss/color ::sy/color)
+(s/def ::ss/dashed ::sy/dashed)
+(s/def ::ss/height ::sy/height)
+(s/def ::ss/shape ::sy/shape)
+(s/def ::ss/tag ::sy/tag)
+(s/def ::ss/type ::sy/type)
+(s/def ::ss/width ::sy/width)
+
+(s/def :fc4/style
   (s/keys
-   :req [::type ::tag]
-   :opt [::background ::border ::color ::dashed ::height ::shape ::width]))
+   :req [::ss/type ::ss/tag]
+   :opt [::ss/background ::ss/border ::ss/color ::ss/dashed ::ss/height ::ss/shape ::ss/width]))
 
-(s/def ::styles (s/coll-of ::style :min-count 1))
+(s/def :fc4/styles (s/coll-of :fc4/style :min-count 1 :gen-max 30))
 
-; We have to capture this at compile time in order for it to have the value we
-; want it to; if we referred to *ns* in the body of a function then, because it
-; is dynamically bound, it would return the namespace at the top of the stack,
-; the “currently active namespace” rather than what we want, which is the
-; namespace of this file, because that’s the namespace all our keywords are
-; qualified with.
-(def ^:private this-ns-name (str *ns*))
-
-(defn styles-from-file
+(defn parse-file
   "Parses the contents of a YAML file, then processes those contents such that
-  they conform to ::style."
+  they conform to :fc4/style."
   [file-contents]
   ;; We could really just pass the entire file contents into qualify-keys,
   ;; as it operates recursively on any and all nested Clojure data
@@ -44,17 +39,17 @@
   ;; passed the expected YAML string — which should contain a seq of maps
   ;; — then it’ll throw. So that’s why map is used below to pass each map
   ;; in the file to qualify-keys individually.
-  (map #(util/qualify-keys % this-ns-name)
+  (map #(u/qualify-keys % 'fc4.styles)
        (yaml/parse-string file-contents)))
 
-(s/def ::yaml-file-contents
+(s/def ::yaml-file-str
   (s/with-gen
     ::fs/non-blank-str
-    #(gen/fmap yaml/generate-string (s/gen ::styles))))
+    #(gen/fmap yaml/generate-string (s/gen :fc4/styles))))
 
-(s/fdef styles-from-file
-  :args (s/cat :file-contents ::yaml-file-contents)
-  :ret  ::styles
+(s/fdef parse-file
+  :args (s/cat :file-contents ::yaml-file-str)
+  :ret  :fc4/styles
   :fn   (fn [{{:keys [file-contents]} :args, ret :ret}]
                 ;; Unlike the similar function fc4.view/parse-file, this
                 ;; needs to parse the strings back from the YAML back into (in

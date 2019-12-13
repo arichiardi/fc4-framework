@@ -1,4 +1,4 @@
-system:
+systems:
   Front:
     description: GUI for end-users
     tags:

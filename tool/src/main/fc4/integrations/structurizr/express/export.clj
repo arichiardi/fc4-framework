@@ -3,29 +3,33 @@
   (:require [cognitect.anomalies  :as anom]
             [clojure.spec.alpha   :as s]
             [clojure.string       :as string :refer [includes? join]]
-            [fc4.integrations.structurizr.express.spec] ;; for side fx
-            [fc4.model            :as m]
+            [fc4.dsl.model] ; for size fx: register specs
+            [fc4.dsl.styles] ; for size fx: register specs
+            [fc4.dsl.view] ; for size fx: register specs
+            [fc4.integrations.structurizr.express.spec] ; for side fx: : register specs
             [fc4.spec             :as fs]
-            [fc4.styles           :as ss]
-            [fc4.util             :as fu :refer [namespaces update-all]]
-            [fc4.view             :as v]))
+            [fc4.util             :as fu :refer [namespaces update-all]]))
 
-(namespaces '[structurizr :as st])
+(namespaces '[fc4.model :as m]
+            '[fc4.styles :as ss]
+            '[fc4.view :as v]
+            '[structurizr :as st])
 
 (defn- sys-position
   "Returns the position of the named system in the view. If the named system is not
   present in the view, returns '0,0'."
   [sys-name view]
-  (get-in view
-          (if (= sys-name (::v/system view))
-            [::v/positions ::v/subject]
-            [::v/positions ::v/other-systems sys-name])
-          "0,0"))
+  (->> (get-in view
+               (if (= sys-name (::v/system view))
+                 [::v/positions ::v/subject]
+                 [::v/positions ::v/other-systems sys-name])
+               [0 0])
+       (join ",")))
 
 (s/fdef sys-position
   :args (s/cat :sys-name ::m/name
-               :view     ::v/view)
-  :ret  ::v/coord-string)
+               :view     :fc4/view)
+  :ret  ::st/coord-string)
 
 (defn- add-in-house-tag
   [tags]
@@ -120,10 +124,10 @@
 
 (s/fdef sys-elem
   :args (s/cat :sys-name ::m/name
-               :view     ::v/view
-               :model    ::m/model)
+               :view     :fc4/view
+               :model    :fc4/model)
   :ret  (s/nilable ::st/system)
-  :fn   (fn [{{:keys [:sys-name :view :model]} :args, ret :ret}]
+  :fn   (fn [{{:keys [:sys-name :model]} :args, ret :ret}]
           (if (get-in model [::m/systems sys-name])
             (= (:name ret) sys-name)
             (and (includes? (:name ret) sys-name)
@@ -148,10 +152,10 @@
 
 (s/fdef person-elem
   :args (s/cat :user-name ::m/name
-               :view      ::v/view
-               :model     ::m/model)
+               :view      :fc4/view
+               :model     :fc4/model)
   :ret  (s/nilable ::st/person)
-  :fn   (fn [{{:keys [user-name view model]} :args, ret :ret}]
+  :fn   (fn [{{:keys [user-name model]} :args, ret :ret}]
           (if (get-in model [::m/users user-name])
             (= (:name ret) user-name)
             (and (includes? (:name ret) user-name)
@@ -162,7 +166,7 @@
   ;; TODO: I think maybe we also need the
   ;; TODO: maybe should be merged with users-of?
   ;; TODO: this should handle the case of a system that the subject uses >1 ways
-  [{:keys [::m/uses ::m/containers ::m/name]} {systems ::m/systems}]
+  [{:keys [::m/uses ::m/containers ::m/name]} {_systems ::m/systems}]
   (or
    (some->> uses ; start with the systems that this system uses directly
              ; add the systems that the containers of this system use
@@ -173,7 +177,7 @@
 
 (s/fdef deps-of
   :args (s/cat :system ::m/system-map
-               :model  ::m/model)
+               :model  :fc4/model)
   :ret  (s/coll-of ::m/system-ref))
 
 (defn- users-of
@@ -209,7 +213,7 @@
   "User here means a system, person, or user that uses the subject system."
   [{user-name ::m/name
     sys-refs  ::m/uses}
-   subject-name]
+   _subject-name]
   (map (fn [sys-ref]
          (merge {:source      user-name
                  :destination (::m/system sys-ref)}
@@ -220,7 +224,7 @@
   :args (s/cat :user ::m/user
                :subject-name ::m/name)
   :ret  (s/coll-of ::st/relationship)
-  :fn   (fn [{{:keys [user subject-name]} :args, ret :ret}]
+  :fn   (fn [{{:keys [user _subject-name]} :args, ret :ret}]
           (every?
            (fn [rel]
              (= (:source rel)
@@ -228,13 +232,13 @@
            ret)))
 
 (defn- get-subject
-  [{subject-name ::v/system :as view} model]
+  [{subject-name ::v/system} model]
   (or (get-in model [::m/systems subject-name])
       (get-in model [::m/systems (keyword subject-name)])))
 
 (s/fdef get-subject
-  :args (s/cat :view ::v/view
-               :model ::m/model)
+  :args (s/cat :view :fc4/view
+               :model :fc4/model)
   :ret  ::m/system-map)
 
 (defn- elements
@@ -249,8 +253,8 @@
     (concat person-elems sys-elems)))
 
 (s/fdef elements
-  :args (s/cat :view  ::v/view
-               :model ::m/model)
+  :args (s/cat :view  :fc4/view
+               :model :fc4/model)
   :ret  (s/coll-of ::st/element))
 
 (defn- relationship-with
@@ -268,7 +272,7 @@
   :args (s/cat :subject-name ::v/name
                :rel          ::st/relationship)
   :ret  (s/nilable ::st/name)
-  :fn   (fn [{{:keys [subject-name rel]} :args, ret-name :ret}]
+  :fn   (fn [{{:keys [rel]} :args, ret-name :ret}]
           (or (= ret-name (:source rel))
               (= ret-name (:destination rel))
               (nil? ret-name))))
@@ -320,14 +324,14 @@
 
 (s/fdef add-control-points
   :args (s/cat :rels ::relationships-without-vertices
-               :view ::v/view)
+               :view :fc4/view)
   :ret  :structurizr.diagram/relationships
   :fn   (fn [{{in-rels :rels
                view    :view} :args
               out-rels        :ret}]
           (and (= (count in-rels) (count out-rels))
                (->> (filter :vertices out-rels)
-                    (every? (fn [{:keys [destination source] :as out-rel}]
+                    (every? (fn [{:keys [destination source]}]
                               (let [all-cp-groups (get-in view [::v/control-points ::v/system-context])
                                     cp-group-systems (set (keys all-cp-groups))]
                                 (or (contains? cp-group-systems destination)
@@ -360,15 +364,15 @@
         (distinct))))
 
 (s/fdef relationships
-  :args (s/cat :view ::v/view
-               :model ::m/model)
+  :args (s/cat :view :fc4/view
+               :model :fc4/model)
   :ret  :structurizr.diagram/relationships
   :fn   (fn [{{:keys [view model]} :args
               ret                  :ret}]
           (let [{_sub-name    ::m/name
                  direct-deps ::m/uses} (get-subject view model)]
                   ;; TODO: also verify control points
-            (every? (fn [{dep-sys-name ::m/system :as dep}]
+            (every? (fn [{dep-sys-name ::m/system}]
                       (some (fn [{source-sys-name :source
                                   dest-sys-name   :destination}]
                               (or (= source-sys-name dep-sys-name)
@@ -409,7 +413,7 @@
     :size (::v/size view)}))
 
 (s/fdef view->system-context
-  :args (s/cat :view ::v/view
+  :args (s/cat :view :fc4/view
                      ; TODO: rather than just a model that is merely *valid*
                      ; as in it conforms with its spec, we should probably
                      ; ensure that what gets passed in *makes sense*. I mean...
@@ -419,7 +423,7 @@
                      ; that’s what it expects, and therefore it can just throw
                      ; an exception (or return an anomaly) if something in it
                      ; does NOT make sense.
-               :model ::m/model
+               :model :fc4/model
                :styles ::ss/styles)
   :ret  (s/or :success ::st/diagram
               :error   ::anom/anomaly))

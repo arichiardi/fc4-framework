@@ -4,10 +4,9 @@
             [clojure.test         :as ct :refer [deftest is testing]]
             [cognitect.anomalies  :as anom]
             [expound.alpha        :as ex :refer [expound-str]]
-            [fc4.io.model.dsl           :as dsl]
-            [fc4.model            :as m]
-            [fc4.styles           :as st]
-            [fc4.view             :as v])
+            [fc4.dsl.model        :as m]
+            [fc4.dsl.view         :as v]
+            [fc4.io.dsl           :as dsl])
   (:import [java.io FileNotFoundException]))
 
 (defn child-dirs
@@ -69,13 +68,13 @@
 
 (deftest read-styles
   (testing "happy path"
-    (is (s/valid? ::st/styles
+    (is (s/valid? :fc4/styles
                   (dsl/read-styles "test/data/styles (valid).yaml"))))
 
   (testing "sad path:"
     (testing "file on disk contains invalid data as per the specs"
       (let [result (dsl/read-styles "test/data/styles (invalid).yaml")]
-        (is (not (s/valid? ::st/styles result)))
+        (is (not (s/valid? :fc4/styles result)))
         (is (s/valid? ::dsl/error result))))
 
     (testing "file does not exist"

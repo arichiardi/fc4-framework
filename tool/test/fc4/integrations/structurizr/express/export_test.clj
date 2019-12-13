@@ -6,10 +6,10 @@
             [cognitect.anomalies     :as anom]
             [expound.alpha           :as expound]
             [fc4.integrations.structurizr.express.export :as e]
-            [fc4.io.model.dsl              :as dsl]
-            [fc4.model               :as m]
-            [fc4.test-utils          :as tu :refer [check]]
-            [fc4.view                :as v]))
+            [fc4.io.dsl              :as dsl]
+            [fc4.dsl.model           :as m]
+            [fc4.dsl.view            :as v]
+            [fc4.test-utils          :as tu :refer [check]]))
 
 (deftest add-control-points (check `e/add-control-points))
 (deftest add-in-house-tag (check `e/add-in-house-tag))

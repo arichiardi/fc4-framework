@@ -5,16 +5,14 @@
   (:require [clojure.spec.alpha      :as s]
             [cognitect.anomalies     :as anom]
             [expound.alpha           :as expound :refer [expound-str]]
-            [fc4.dsl.model           :as dsl :refer [parse-file]]
+            [fc4.dsl.model           :as m]
+            [fc4.dsl.styles          :as st]
+            [fc4.dsl.view            :as v]
             [fc4.io.yaml             :as ioy :refer [yaml-files]]
-            ; [fc4.model               :as m]
             [fc4.spec                :as fs]
-            [fc4.styles              :as st :refer [styles-from-file]]
-            [fc4.util                :as u :refer [fault]]
-            [fc4.yaml                :as fy :refer [split-file]]
-            [fc4.view                :as v :refer [parse-file]]
-            [medley.core                   :refer [map-vals remove-vals]])
-  (:import [java.io FileNotFoundException]))
+            [fc4.util                :as u   :refer [fault]]
+            [fc4.yaml                :as fy  :refer [split-file]]
+            [medley.core                     :refer [map-vals remove-vals]]))
 
 (defn- read-model-files
   "Recursively find, read, and parse YAML files under a directory tree. If a
@@ -25,7 +23,7 @@
    (fn [results path]
      (assoc results
             (str path)
-            (parse-model-file (slurp path))))
+            (m/parse-file (slurp path))))
    {}
    (yaml-files root-path)))
 
@@ -59,7 +57,7 @@
   returned."
   [parsed-file-contents]
   (remove-vals nil?
-               (map-vals dsl/validate-parsed-file parsed-file-contents)))
+               (map-vals m/validate-parsed-file parsed-file-contents)))
 
 (defn uber-error-message
   [validation-results]
@@ -84,7 +82,7 @@
     (if-not (empty? validation-results)
       (assoc (fault (uber-error-message validation-results))
              ::details validation-results)
-      (val-or-error (dsl/build-model (map second model-files))
+      (val-or-error (m/build-model (map second model-files))
                     ::m/model))))
 
 (s/fdef read-model
@@ -97,7 +95,7 @@
   (-> (slurp file-path)
       (split-file)
       (get ::fy/main)
-      (parse-file)
+      (v/parse-file)
       (val-or-error ::v/view)))
 
 (s/fdef read-view
@@ -110,12 +108,12 @@
   (-> (slurp file-path)
       (split-file)
       (get ::fy/main)
-      (st/styles-from-file)
-      (val-or-error ::st/styles)))
+      (st/parse-file)
+      (val-or-error :fc4/styles)))
 
 (s/fdef read-styles
   :args (s/cat :file-path ::fs/file-path-str)
-  :ret  (s/or :success ::st/styles
+  :ret  (s/or :success :fc4/styles
               :error   ::error))
 
 (comment

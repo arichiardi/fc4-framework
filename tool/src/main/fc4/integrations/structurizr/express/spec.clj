@@ -36,11 +36,11 @@
 (def coord-pattern-base "(\\d{1,4}), ?(\\d{1,4})")
 (def coord-pattern (re-pattern coord-pattern-base))
 
-(s/def ::coord-string
+(s/def ::st/coord-string
   (s/with-gen (s/and string? (partial re-matches coord-pattern))
     #(gen'/string-from-regex coord-pattern)))
 
-(s/def ::st/position ::coord-string)
+(s/def ::st/position ::st/coord-string)
 
 (s/def ::st/foo string?)
 

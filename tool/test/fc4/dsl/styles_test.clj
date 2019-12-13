@@ -3,4 +3,4 @@
             [fc4.dsl.styles :as st]
             [fc4.test-utils :refer [check]]))
 
-(deftest styles-from-file (check `st/styles-from-file 1000))
+(deftest parse-file (check `st/parse-file 1000))

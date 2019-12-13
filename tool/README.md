@@ -62,10 +62,8 @@ So you’ll probably want to run `clj -A:dev:test`
 ```shell
 $ clj -A:dev:test
 Clojure 1.10.0
-=> (do
-     (require '[eftest.runner :refer [find-tests run-tests]])
-     (run-tests (find-tests "test") {:fail-fast? true})
-     (print (char 7))) ; beep to get your attention
+=> (require '[eftest.runner :refer [find-tests run-tests]])
+   (do (run-tests (find-tests "test") {:fail-fast? true}) (print (char 7)))
 ...
 ```
 
