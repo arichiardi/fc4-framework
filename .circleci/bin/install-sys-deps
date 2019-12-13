@@ -16,7 +16,8 @@ OS="$1"
 case "$OS" in
 'linux-arch')
   # We’re using sudo in /bin/install-clojure
-  pacman --refresh --sync --needed --noconfirm --noprogressbar sudo jre11-openjdk-headless chromium
+  # We need tar so we can expand cached dependencies in our CI environment
+  pacman --refresh --sync --needed --noconfirm --noprogressbar jre11-openjdk-headless chromium sudo tar
 
   # shellcheck disable=SC1091
   source /etc/profile.d/jre.sh

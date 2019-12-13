@@ -41,6 +41,8 @@ executors:
       OS: linux-arch
 
 commands:
+  # This step needs to come before restore_cache because some of the Docker images we’re using (e.g.
+  # arch) don’t have tar installed, and tar is required to restore the cache.
   install-sys-deps:
     description: Install system dependencies, if necessary
     parameters:
@@ -63,11 +65,11 @@ jobs:
      working_directory: ~/project/tool
      steps:
        - checkout: {path: ~/project}
+       - install-sys-deps:
+          os: "$OS" # This env var will be set by the executor
        - restore_cache:
            keys:
              - test-deps-v1-{{checksum "deps.edn"}}-{{checksum "bin/download-test-deps"}}
-       - install-sys-deps:
-           os: "$OS" # This env var will be set by the executor
        - run: bin/install-clojure
        - run: bin/download-test-deps
        - save_cache:
