@@ -9,7 +9,7 @@ positions:
   containers:
     Front: [3, 9]
     Internal: [16, 13]
-    Back: [1,5]
+    Back: [1, 5]
   other-systems:
     Mobile: [4, 9593]
     External: [59, 234]
@@ -17,10 +17,11 @@ positions:
     Front: [74, 67]
     Internal: [88, 8]
 control-points:
-  system-context:
+  context:
     Front:
-      - [[196, 73], [169,48], [446,59]]
-      - [[79,3], [559, 6770], [19, 9396]]
+      - [196, 73]
+      - [169, 48]
+      - [446, 59]
   container:
     Front:
       Mobile:

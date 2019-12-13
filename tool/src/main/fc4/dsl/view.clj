@@ -47,22 +47,17 @@
    :req [(and ::v/subject (or ::v/users ::v/containers ::v/other-systems))]
    :opt [::v/users ::v/containers ::v/other-systems]))
 
-(s/def ::v/control-point-seqs
-  (s/coll-of (s/coll-of ::v/coord-pair :min-count 1 :gen-max 3)
-             :min-count 1
-             :gen-max 3))
-
 (s/def ::v/control-point-group
-  (s/map-of ::v/name ::v/control-point-seqs
+  (s/map-of ::v/name (s/coll-of ::v/coord-pair :min-count 1 :gen-max 3)
             :min-count 1
             :gen-max 3))
 
-(s/def ::v/system-context ::v/control-point-group)
+(s/def ::v/context ::v/control-point-group) ;; for System Context diagrams
 (s/def ::v/container (s/map-of ::v/name ::v/control-point-group))
 
 (s/def ::v/control-points
   (s/keys
-   :req [::v/system-context]
+   :req [::v/context]
    :opt [::v/container]))
 
 (s/def ::v/size ::sd/size)

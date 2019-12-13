@@ -19,7 +19,7 @@
            (map #(Integer/parseInt %))))
 
 (s/fdef parse-coords
-  :args (s/cat :s ::fs/coord-string)
+  :args (s/cat :s ::st/coord-string)
   :ret (s/coll-of ::fs/coord-int :count 2)
   :fn (fn [{:keys [ret args]}]
         (= ret

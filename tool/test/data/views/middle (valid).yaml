@@ -16,12 +16,11 @@ positions:
     Front: [74, 67]
     Internal: [88,8]
 control-points:
-  system-context:
+  context:
     Front:
-      Mobile:
-        - [196, 73]
-        - [169, 48]
-        - [446, 59]
+      - [196, 73]
+      - [169, 48]
+      - [446, 59]
   container:
     Front:
       Mobile:

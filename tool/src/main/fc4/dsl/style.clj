@@ -41,7 +41,7 @@
   ;; passed the expected YAML string — which should contain a seq of maps
   ;; — then it’ll throw. So that’s why map is used below to pass each map
   ;; in the file to qualify-keys individually.
-  (map #(u/qualify-keys % 'fc4.styles)
+  (map #(u/qualify-keys % 'fc4.style)
        (yaml/parse-string file-contents)))
 
 (s/def ::yaml-file-str
