@@ -19,23 +19,28 @@ executors:
       # This image is based on Debian GNU/Linux 9 (stretch)
       # https://hub.docker.com/layers/circleci/openjdk/11-browsers/images/sha256-c5b820f7ff08cff4f0695ac63461391f570eea0eba0be202ca88e9ecc0c4ef9a
       - image: circleci/openjdk:11@sha256:c5b820f7ff08cff4f0695ac63461391f570eea0eba0be202ca88e9ecc0c4ef9a
+    resource_class: xlarge
   circleci-openjdk-11-browsers:
     docker:
       # This image is based on Debian GNU/Linux 9 (stretch)
       # https://hub.docker.com/layers/circleci/openjdk/11-browsers/images/sha256-e00fb2b47be63574f1f0087e5cf1b0782c0926d54de5e71d0438eed28815a5cc
       - image: circleci/openjdk:11-browsers@sha256:e00fb2b47be63574f1f0087e5cf1b0782c0926d54de5e71d0438eed28815a5cc
+    resource_class: xlarge
   circleci-openjdk-8-browsers:
     docker:
       # This image is based on Debian GNU/Linux 9 (stretch)
       # https://hub.docker.com/layers/circleci/openjdk/8-browsers/images/sha256-101451bab2c842fe2184c5830b7f82aca4bc15760240044358ae37145b6b10ea
       - image: circleci/openjdk:8-browsers@sha256:101451bab2c842fe2184c5830b7f82aca4bc15760240044358ae37145b6b10ea
+    resource_class: xlarge
   arch:
     docker:
       # https://hub.docker.com/layers/archlinux/library/archlinux/latest/images/sha256-1097437745db73ba839d60b9b9b96e6648e62751519a1319bfccc849f6a3f74c
       - image: archlinux:20191105@sha256:1097437745db73ba839d60b9b9b96e6648e62751519a1319bfccc849f6a3f74c
+    resource_class: xlarge
   macos-mojave:
     macos:
       xcode: 11.1.0
+    resource_class: large
 
 commands:
   # Most of these commands specify command paths relative to the current user’s home dir because the
