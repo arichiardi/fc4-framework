@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-## Run this from <project-root>/tool/
+## Run this from the project root
 
 # This script packages up the tool into a JAR file. That’s *almost* all we need to distribute, but
 # in fact we have another script (pkg-all) that creates a .tar.gz file containing the JAR file, a
