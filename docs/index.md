@@ -1,22 +1,17 @@
 # The FC4 Framework
 
 <figure style="float: right; border: 1px solid silver; padding: 1em; margin-top: 0; text-align: center;">
-  <img src="tool/fc4-tool-02-container.png"
+  <img src="diagrams/fc4-02-container.png"
        width="350" height="299"
        style="border: 1px solid silver;"
-       alt="Example: a container diagram of fc4-tool."
-       title="Example: a container diagram of fc4-tool.">
-  <figcaption>Example: a container diagram of fc4-tool.</figcaption>
+       alt="Example: a container diagram of fc4."
+       title="Example: a container diagram of fc4.">
+  <figcaption>Example: a container diagram of fc4.</figcaption>
 </figure>
 
-FC4 is a [_Docs as Code_][docs-as-code] framework that enables software creators and documentarians
+FC4 is a [_Docs as Code_][docs-as-code] tool that enables software creators and documentarians
 to author, publish, and maintain software architecture diagrams more effectively, efficiently, and
 collaboratively over time.
-
-It has two components:
-
-* [the methodology](methodology/)
-* [the tool](tool/)
 
 It builds on [the C4 Model][c4-model] and [Structurizr Express][structurizr-express], both of which
 were created by and are maintained by [Simon Brown][simon-brown].
@@ -33,8 +28,8 @@ FC4 is not ([yet][backronym]) an acronym or initialism; it doesn’t stand for a
 a name.
 
 The name is a combination of “FC” and “C4” — the former is a reference to Funding Circle, the
-originating context of the framework; the latter to Simon Brown’s C4 model, the foundation of the
-framework.
+originating context of the tool; the latter to Simon Brown’s C4 model, the foundation of the
+tool.
 
 ## Copyright & License
 
