@@ -1,17 +1,19 @@
-# 3. The Graphical Notation « The FC4 Methodology
+# 3. The Graphical Notation « FC4 User Manual
 
 The whole point of all of this is to create graphics, and we need those graphics to use a clear and
 consistent visual language.
 
-For now we’re using Structurizr Express, a tool described in [The Toolset](toolset.md), to render
-our diagrams. Its visual language is mostly fixed, apart for limited support for some custom styles.
+For now we’re using [Structurizr Express][structurizr-express] (SE), a tool described in [The
+Toolset](toolset.md), to render our diagrams. Its visual language is mostly fixed, apart for limited
+support for some custom styles.
+
 Most of our current graphical notation is therefore inherited from that tool. Since its output is of
 an acceptable caliber, this is actually a useful constraint for us right now; it allows us to focus
-on other aspects of this methodology..
+on other aspects of this tool.
 
 ## Example
 
-This example is by [Simon Brown](http://simonbrown.je/):
+This example is by [Simon Brown][simon-brown]:
 
 ![graphical notation example](images/fc4_graphical_notation_example.png)
 
@@ -22,3 +24,7 @@ This example is by [Simon Brown](http://simonbrown.je/):
 ----
 
 Please continue to [The Toolset](toolset.md) or go back to [the top page](README.md).
+
+
+[simon-brown]: http://simonbrown.je/
+[structurizr-express]: https://structurizr.com/express

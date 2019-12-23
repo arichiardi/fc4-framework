@@ -1,4 +1,4 @@
-# The FC4 Framework
+# FC4
 
 <figure style="float: right; border: 1px solid silver; padding: 1em; margin-top: 0; text-align: center;">
   <img src="diagrams/fc4-02-container.png"
@@ -9,18 +9,38 @@
   <figcaption>Example: a container diagram of fc4.</figcaption>
 </figure>
 
-FC4 is a [_Docs as Code_][docs-as-code] tool that enables software creators and documentarians
-to author, publish, and maintain software architecture diagrams more effectively, efficiently, and
-collaboratively over time.
+FC4 is a [_Docs as Code_][docs-as-code] tool that helps software creators and documentarians author
+software architecture diagrams using [the C4 model for visualising software architecture][c4-model].
 
-It builds on [the C4 Model][c4-model] and [Structurizr Express][structurizr-express], both of which
-were created by and are maintained by [Simon Brown][simon-brown].
+<style>
+   li {
+     margin-left: -1em;
+     padding-left: 0.5em;
+   }
 
-It originated at and is maintained by [Funding Circle](fc-engineering-blog).
+   li#builds::marker { content: "🏗"; }
+   li#thanks::marker { content: "🙏"; }
+   li#origin::marker { content: "💡"; }
+</style>
 
-To get started, we recommend reading [the methodology](methodology/). If you have any questions or
-feedback please [create an issue][new-issue] and one of the maintainers will get back to you
-shortly.
+<ul>
+  <li id="builds">
+    It builds on <a href="https://structurizr.com/express">Structurizr Express</a>.
+  </li>
+  <li id="thanks">
+    Many thanks to <a href="http://simonbrown.je/">Simon Brown</a> for creating and maintaining both
+    the C4 model and Structurizr Express.
+  </li>
+  <li id="origin">
+    It originated at and is maintained by <a href="https://engineering.fundingcircle.com/">Funding
+    Circle</a>.
+  </li>
+</ul>
+
+To get started, we recommend reading [the user manual](manual/).
+
+If you have any questions or feedback please [create an issue][new-issue] and one of the maintainers
+will get back to you shortly.
 
 ## The Name
 
@@ -40,8 +60,5 @@ Distributed under [the BSD 3-Clause License][license].
 [backronym]: https://en.wikipedia.org/wiki/Backronym
 [c4-model]: https://c4model.com/
 [docs-as-code]: https://www.writethedocs.org/guide/docs-as-code/
-[fc-engineering-blog]: https://engineering.fundingcircle.com/
 [license]: https://github.com/FundingCircle/fc4-framework/blob/master/LICENSE
 [new-issue]: https://github.com/FundingCircle/fc4-framework/issues/new
-[simon-brown]: http://simonbrown.je/
-[structurizr-express]: https://structurizr.com/express

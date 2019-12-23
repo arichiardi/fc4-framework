@@ -1,4 +1,4 @@
-# Contributing to the FC4 Framework
+# Contributing to FC4
 
 Contributions — including any and all feedback — are welcome and greatly appreciated!
 

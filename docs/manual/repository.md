@@ -1,4 +1,4 @@
-# 5. The Repository « The FC4 Methodology
+# 5. The Repository « FC4 User Manual
 
 ## Summary
 
@@ -16,7 +16,7 @@
 
 ### Cotenancy with Other Docs, Code, et cetera
 
-This methodology does not specify, and is not concerned with, the question of how your organization
+This manual does not specify, and is not concerned with, the question of how your organization
 organizes its code and docs into one, a few, or many different repositories — only that all of your
 diagrams should live together in the same repo.
 
@@ -40,12 +40,11 @@ repository storing the source and images for 100 diagrams might be 100 MB or mor
 
 Despite the downsides, it’s still worthwhile to store the images in the repository. The main reason
 is that doing so enables seeing the changes made to the diagrams, graphically, via image diffing
-features of e.g.
-[GitHub](https://help.github.com/articles/rendering-and-diffing-images/#viewing-differences) and
-possibly other git hosting services. This can make peer review drastically more effective.
+features of e.g. [GitHub][github-image-diffing] and possibly other git hosting services. This can
+make peer review drastically more effective.
 
-If you prefer to keep your Git repositories svelte, [Git Large File Storage
-(LFS)](https://git-lfs.github.com/) should work well with this methodology.
+If you prefer to keep your Git repositories svelte, [Git Large File Storage (LFS)][git-lfs] works
+well with these recommendations.
 
 ### Directory Structure
 
@@ -198,3 +197,7 @@ diagrams
 
 Please continue to [The Authoring Workflow](authoring_workflow.md) or go back to
 [the top page](README.md).
+
+
+[git-lfs]: https://git-lfs.github.com/
+[github-image-diffing]: https://help.github.com/articles/rendering-and-diffing-images/#viewing-differences

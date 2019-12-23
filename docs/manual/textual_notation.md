@@ -1,4 +1,4 @@
-# 2. The Textual Notation « The FC4 Methodology
+# 2. The Textual Notation « FC4 User Manual
 
 We have a few key requirements for our textual notation:
 

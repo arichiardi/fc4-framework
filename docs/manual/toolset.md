@@ -1,4 +1,4 @@
-# 4. The Toolset « The FC4 Methodology
+# 4. The Toolset « FC4 User Manual
 
 The current toolset for authoring and editing FC4 diagrams is:
 

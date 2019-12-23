@@ -124,8 +124,8 @@ install the tool:
 
 ### Full Workflow
 
-Please see [The Authoring Workflow](../methodology/authoring_workflow.html) section of
-[the FC4 Methodology](../methodology/).
+Please see [The Authoring Workflow](../manual/authoring_workflow.html) section of
+[the FC4 User Manual](../manual/).
 
 
 ## Command Line Interface Reference
@@ -226,8 +226,8 @@ Enables a debug mode of dubious utility.
 
 ## Source Code
 
-Like the entire framework, the tool is [Free and Libre Open Source Software (FLOSS)][floss] so its
-source code is readily available for review or modification via [its GitHub repository][repo].
+This tool is [Free and Libre Open Source Software (FLOSS)][floss]; its source code is readily
+available for review or modification via [its GitHub repository][repo].
 
 
 [adoptopenjdk]: https://adoptopenjdk.net/installation.html?variant=openjdk11&jvmVariant=hotspot

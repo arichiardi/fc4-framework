@@ -1,4 +1,4 @@
-# 1. The Scheme « The FC4 Methodology
+# 1. The Scheme « FC4 User Manual
 
 Before we can start creating diagrams, we need a scheme that guides _what_ we diagram, and _how_ —
 e.g. what _set_ of diagrams do we need, how do they fit together, and what should be included in
@@ -9,8 +9,8 @@ subjects.
 
 ## The Foundation
 
-This methodology uses [The C4 Model](https://c4model.com), created by [Simon
-Brown](http://simonbrown.je), as its foundation.
+FC4 uses [The C4 Model](https://c4model.com), created by [Simon Brown](http://simonbrown.je), as its
+foundation; it is fundamentally a tool for authoring C4 diagrams.
 
 The [C4 Model website](https://c4model.com) has very detailed definitions, explanations, and
 examples; it is the canonical definition of the model. We’ll continue to summarize it here for
@@ -19,7 +19,7 @@ precedence.
 
 In a nutshell, the C4 Model defines two sets of diagrams: [the core
 set](https://c4model.com/#coreDiagrams) and [a supplementary
-set](https://c4model.com/#supplementaryDiagrams). FC4 currently includes two of those core diagrams
+set](https://c4model.com/#supplementaryDiagrams). FC4 currently supports two of those core diagrams
 and two of those supplementary diagrams.
 
 ### The Diagrams
@@ -39,7 +39,7 @@ They are, from the highest level (most zoomed out) to the lowest level (most zoo
 For the full definitions please see [Core Diagrams](https://c4model.com/#coreDiagrams) and
 [Supplementary Diagrams](https://c4model.com/#supplementaryDiagrams).
 
-Anyone using this methodology is of course free to use or not use whichever diagrams they see fit.
+Anyone using FC4 is of course free to use or not use whichever diagrams they see fit.
 
 ----
 

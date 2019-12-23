@@ -1,6 +1,6 @@
-# 7. Publishing « The FC4 Methodology
+# 7. Publishing « FC4 User Manual
 
-This methodology does not specify where or how diagrams should be published, as these guidelines
+This manual has no recommendations on where or how diagrams should be published, as these guidelines
 will probably tend to be specific to the organization employing FC4.
 
 However, we could probably collect some suggestions here:
