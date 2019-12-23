@@ -115,7 +115,9 @@
                                          "-m" "fc4.io.cli.main"
                                          "--aot" "all"
                                          "--no-copy-source"
-                                         "--out" "target"]}
+                                         "--out" "target"
+                                         "--app-artifact-id" "fc4"
+                                         "--app-version" "SNAPSHOT"]}
 
            :outdated      {:extra-deps  {olical/depot {:git/url "https://github.com/Olical/depot.git"
                                                        :sha "309525c33a204f469ef420e3bfd02b5100439d63"}}
