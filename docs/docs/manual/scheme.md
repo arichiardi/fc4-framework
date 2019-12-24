@@ -1,3 +1,9 @@
+---
+# Cool URLs don’t change: https://www.w3.org/Provider/Style/URI.html
+redirect_from:
+  - /methodology/scheme
+  - /methodology/scheme.html
+---
 # 1. The Scheme « FC4 User Manual
 
 Before we can start creating diagrams, we need a scheme that guides _what_ we diagram, and _how_ —
@@ -43,4 +49,5 @@ Anyone using FC4 is of course free to use or not use whichever diagrams they see
 
 ----
 
-Please continue to [The Textual Notation](textual_notation.md) or go back to [the top page](README.md).
+Please continue to [The Textual Notation](/docs/manual/textual-notation) or go back to
+[the top page of the manual](/docs/manual).

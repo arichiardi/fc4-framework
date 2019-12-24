@@ -1,4 +1,10 @@
-# 5. The Repository « FC4 User Manual
+---
+# Cool URLs don’t change: https://www.w3.org/Provider/Style/URI.html
+redirect_from:
+  - /methodology/repository
+  - /methodology/repository.html
+---
+# 6. The Repository « FC4 User Manual
 
 ## Summary
 
@@ -51,9 +57,9 @@ well with these recommendations.
 * FC4 diagrams are grouped by “landscape”
   * As explained below, this grouping may be explicit or implict
 * Each landscape includes:
-  * a single [System Landscape](scheme.md) diagram depicting N systems
-  * for each of those N systems, a [System Context](scheme.md) diagram and a [Container](scheme.md) diagram
-  * optionally, one or more [Dynamic](scheme.md) diagrams
+  * a single [System Landscape][scheme] diagram depicting N systems
+  * for each of those N systems, a [System Context][scheme] diagram and a [Container][scheme] diagram
+  * optionally, one or more [Dynamic][scheme] diagrams
 * Most organizations have only a single landscape
   * In this case the landscape directory may be named something general like `diagrams`
 * An organization with multiple landscapes should create a directory for each one, grouping them
@@ -195,9 +201,10 @@ diagrams
 
 ----
 
-Please continue to [The Authoring Workflow](authoring_workflow.md) or go back to
-[the top page](README.md).
+Please continue to [The Authoring Workflow](/docs/manual/authoring-workflow) or go back to
+[the top page of the manual](/docs/manual).
 
 
 [git-lfs]: https://git-lfs.github.com/
 [github-image-diffing]: https://help.github.com/articles/rendering-and-diffing-images/#viewing-differences
+[scheme]: /docs/manual/scheme

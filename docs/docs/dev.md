@@ -1,8 +1,5 @@
 # Developing and Testing FC4
 
-[![CircleCI](https://circleci.com/gh/FundingCircle/fc4-framework.svg?style=shield)](https://circleci.com/gh/FundingCircle/fc4-framework)
-[![codecov](https://codecov.io/gh/FundingCircle/fc4-framework/branch/master/graph/badge.svg)](https://codecov.io/gh/FundingCircle/fc4-framework)
-
 This page contains docs for those wishing to work on the tool itself.
 
 For background, installation, and usage of the tool, see [the home page](../).

@@ -1,3 +1,8 @@
+---
+# This particular file must have front matter in order to be rendered by
+# jekyll-optional-front-matter, as a special case.
+#   See: https://github.com/benbalter/jekyll-optional-front-matter/#one-potential-gotcha
+---
 # Contributing to FC4
 
 Contributions — including any and all feedback — are welcome and greatly appreciated!
@@ -68,4 +73,7 @@ By making a contribution to this project, I certify that:
 
 ### License
 
-All contributions to this project are licensed under [the project’s license](LICENSE).
+All contributions to this project are licensed under [the project’s license][license].
+
+
+[license]: https://github.com/FundingCircle/fc4-framework/blob/master/LICENSE

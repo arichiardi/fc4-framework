@@ -1,4 +1,4 @@
-# FC4 Command Line Interface (CLI) Reference
+# Command Line Interface (CLI) Reference
 
 Basic usage: `fc4 OPTIONS PATH [PATH...]`
 
@@ -21,7 +21,7 @@ when they’re changed. To exit, press ctrl-c on your keyboard.
 
 ### Feature Options
 
-* The tool has three feature options, one for each of its [major features](#features)
+* The tool has three feature options, one for each of its [major features][features]
 * At least one of these options _must_ be specified with every invocation of the program
   * Any of the feature options may be specified together
 * These options may be specified in either long or short form
@@ -94,7 +94,7 @@ Prints out usage information and exits.
 Enables a debug mode of dubious utility.
 
 
-[features]: ../features.md
-[formatting]: ../features.md#formatting
-[rendering]: ../features.md#rendering
-[snapping]: ../features.md#snapping
+[features]: /docs/features
+[formatting]: /docs/features#formatting
+[rendering]: /docs/features#rendering
+[snapping]: /docs/features#snapping

@@ -1,2 +1,22 @@
-title: FC4
+# Required by GitHub Pages
 repository: FundingCircle/fc4-framework
+
+# GitHub pages could derive these from the repo for us, but I prefer to override them with these
+# values, for now, because the name and description of the repo are temporarily a little out of sync
+# with the newer language in these docs.
+title: FC4
+description: A tool for authoring C4 diagrams
+
+# This is the default theme for GitHub Pages; I’m just leaving this here as a form of documentation
+# in case someone is trying to figure out what theme this site is using, as I found it wasn’t easy
+# for me to figure this out.
+theme: jekyll-theme-primer
+
+plugins:
+  - jekyll-redirect-from
+
+permalink: :pretty
+
+# See https://github.com/benbalter/jekyll-optional-front-matter#configuration
+optional_front_matter:
+  remove_originals: true

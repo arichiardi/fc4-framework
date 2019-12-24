@@ -1,4 +1,10 @@
-# 6. The Authoring Workflow « FC4 User Manual
+---
+# Cool URLs don’t change: https://www.w3.org/Provider/Style/URI.html
+redirect_from:
+  - /methodology/authoring_workflow
+  - /methodology/authoring_workflow.html
+---
+# 7. The Authoring Workflow « FC4 User Manual
 
 
 ## Summarized Workflow
@@ -12,12 +18,12 @@
 
 ## Full Workflow
 
-1. Create a new git branch in your local instance of [the diagram repository](repository.md)
+1. Create a new git branch in your local instance of [the diagram repository][repo]
 1. In your text editor: either create a new diagram source file or open an existing diagram source
    file
 1. In your terminal, run `fc4 -fsrw path/to/repo`
-   1. This starts [fc4](toolset.md#fc4) watching your repository for changes to any
-      diagram source YAML file (or new files)
+   1. This starts FC4 watching your repository for changes to any diagram source YAML file (or new
+      files)
    1. Each file will be [formatted][formatting], [snapped][snapping], and [rendered][rendering] when
       it changes or is created
       1. A future release of the tool will enable users to specify which actions should be performed
@@ -77,8 +83,9 @@ Here’s a screenshot of Structurizr Express:
 
 ----
 
-Please continue to [Publishing](publishing.md) or go back to [the top page](README.md).
+Please continue to [Publishing](/docs/manual/publishing) or go back to [the top page of the manual](/docs/manual).
 
-[formatting]: ../tool/#formatting
-[snapping]: ../tool/#snapping
-[rendering]: ../tool/#rendering
+[formatting]: /docs/features#formatting
+[snapping]: /docs/features#snapping
+[rendering]: /docs/features#rendering
+[repo]: /docs/manual/repository
