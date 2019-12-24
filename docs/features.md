@@ -1,8 +1,8 @@
-## Features
+# Features of FC4
 
-The tool has three main features:
+FC4 has three main features:
 
-### Formatting
+## Formatting
 
 When used to create or edit a diagram, [Structurizr Express][structurizr-express] (re)generates the
 diagram source YAML in such a way that the YAML becomes noisy and the sorting can change
@@ -18,7 +18,7 @@ So this feature rewrites diagram YAML files:
 
 …thereby facilitating the authoring, editing, and reviewing of revisions to the diagrams.
 
-### Snapping
+## Snapping
 
 Improves the layout of [Structurizr Express][structurizr-express] diagrams:
 
@@ -29,7 +29,7 @@ Improves the layout of [Structurizr Express][structurizr-express] diagrams:
 * Offsets the positions of `People` elements so they’ll align properly with other kinds of elements
   (working around a rendering quirk of Structurizr Express)
 
-### Rendering
+## Rendering
 
 Given [Structurizr Express][structurizr-express] diagram YAML files, creates image files that
 contain the visualization of the diagram.

@@ -42,7 +42,7 @@ We have two prongs to our testing strategy: previewing and linting.
 
 * We use [Vale][vale] to [lint][lint-wiki] our prose
 * We run the tool from the root of the repo, rather than the directory `docs`, because there are a
-  few other directories in the repo that we lint with Vale
+  few other files in the repo that we lint with Vale
 
 ##### Installing Vale
 
@@ -51,7 +51,7 @@ We have two prongs to our testing strategy: previewing and linting.
 
 ##### Running Vale
 
-1. From the root of the repo, run `bin/lint-prose`
+1. From the root of the repo, run `bin/lint/lint-prose`
 
 
 [fc4-contributors]: https://github.com/FundingCircle/fc4-framework/graphs/contributors

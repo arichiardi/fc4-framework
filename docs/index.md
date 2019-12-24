@@ -1,29 +1,50 @@
 # FC4
 
-<figure style="float: right; border: 1px solid silver; padding: 1em; margin-top: 0; text-align: center;">
-  <img src="diagrams/fc4-02-container.png"
-       width="350" height="299"
-       style="border: 1px solid silver;"
-       alt="Example: a container diagram of fc4."
-       title="Example: a container diagram of fc4.">
+<style>
+  figure {
+    float: right;
+    border: 1px solid silver;
+    padding: 1em;
+    text-align: center;
+
+    /* Hides the rule under the headings where it would otherwise appear behing the figure. */
+    background-color: white;
+  }
+
+  figure img {
+    border: 1px solid silver;
+    min-width: 350px;
+    min-height: 299px;
+  }
+
+  figure + p {
+    font-size: 125%;
+  }
+
+  ul#info { margin-top: 2em; margin-bottom: 2em; }
+
+  ul#info > li {
+    margin-left: -0.5em;
+    padding-left: 0.5em;
+    margin-bottom: 1em;
+  }
+
+  li#info::marker { font-size: 150%; }
+  li#builds::marker { content: "🏗"; }
+  li#thanks::marker { content: "🙏"; }
+  li#origin::marker { content: "💡"; }
+</style>
+
+<figure>
+  <img src="diagrams/fc4-02-container.png" width="350" height="299"
+       alt="Example: a container diagram of fc4.">
   <figcaption>Example: a container diagram of fc4.</figcaption>
 </figure>
 
 FC4 is a [_Docs as Code_][docs-as-code] tool that helps software creators and documentarians author
 software architecture diagrams using [the C4 model for visualising software architecture][c4-model].
 
-<style>
-   li {
-     margin-left: -1em;
-     padding-left: 0.5em;
-   }
-
-   li#builds::marker { content: "🏗"; }
-   li#thanks::marker { content: "🙏"; }
-   li#origin::marker { content: "💡"; }
-</style>
-
-<ul>
+<ul id="info">
   <li id="builds">
     It builds on <a href="https://structurizr.com/express">Structurizr Express</a>.
   </li>
@@ -37,19 +58,26 @@ software architecture diagrams using [the C4 model for visualising software arch
   </li>
 </ul>
 
+
+## Get Started
+
 To get started, we recommend reading [the user manual](manual/).
+
+
+## Help & Feedback
 
 If you have any questions or feedback please [create an issue][new-issue] and one of the maintainers
 will get back to you shortly.
 
-## The Name
 
-FC4 is not ([yet][backronym]) an acronym or initialism; it doesn’t stand for anything — it’s “just”
-a name.
+## Documentation
 
-The name is a combination of “FC” and “C4” — the former is a reference to Funding Circle, the
-originating context of the tool; the latter to Simon Brown’s C4 model, the foundation of the
-tool.
+* [CLI Reference](reference/cli.md)
+* [Contributing](contributing.md)
+* [Developing and Testing](dev/index.md)
+* [The Name](the-name.md)
+* [User Manual](manual/index.md)
+
 
 ## Copyright & License
 
@@ -57,7 +85,6 @@ Copyright © 2018–2019 Funding Circle Ltd.
 
 Distributed under [the BSD 3-Clause License][license].
 
-[backronym]: https://en.wikipedia.org/wiki/Backronym
 [c4-model]: https://c4model.com/
 [docs-as-code]: https://www.writethedocs.org/guide/docs-as-code/
 [license]: https://github.com/FundingCircle/fc4-framework/blob/master/LICENSE
