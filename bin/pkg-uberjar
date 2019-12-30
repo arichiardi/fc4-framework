@@ -18,6 +18,6 @@ target_dir="target/pkg"
 mkdir -p $target_dir
 
 target_path="$target_dir/fc4.jar"
-mv target/tool-1.0.0-SNAPSHOT-standalone.jar "$target_path"
+mv target/fc4-SNAPSHOT-standalone.jar "$target_path"
 
 echo "Successfully created $target_path"
