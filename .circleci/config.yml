@@ -168,9 +168,8 @@ jobs:
        executor:
          type: string
      executor: << parameters.executor >>
-     working_directory: ~/test/test-renders
      steps:
-       - checkout: {path: ~/project} # only so we can access the test diagram YAML file
+       - checkout # only so we can access the test diagram YAML file
        - install-sys-deps:
            scenario: run
        - attach_workspace: {at: ~/workspace} # so we can access the distribution package that was built in build_dist_pkg
@@ -179,10 +178,12 @@ jobs:
            command: tar -xzv -f ~/workspace/packages/fc4-*.tar.gz -C /tmp
        - run:
            name: Move test diagram YAML into place
-           command: mv ~/project/test/data/structurizr/express/diagram_valid_messy.yaml test-render-1.yaml
+           command: mkdir ~/test-renders && mv test/data/structurizr/express/diagram_valid_messy.yaml ~/test-renders/test-render-1.yaml
        - run:
            name: Render the diagram
-           command: /tmp/fc4/fc4 --render test-render-1.yaml && mv test-render-1.png test-render-default.png
+           command: /tmp/fc4/fc4 --render ~/test-renders/*.yaml
+       - store_artifacts:
+           path: ~/test-renders
 
    publish_dist_pkg:
      executor: debian-11
