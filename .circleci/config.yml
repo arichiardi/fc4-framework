@@ -170,7 +170,7 @@ jobs:
      executor: << parameters.executor >>
      working_directory: ~/test/test-renders
      steps:
-       - checkout # only so we can access the test diagram YAML file
+       - checkout: {path: ~/project} # only so we can access the test diagram YAML file
        - install-sys-deps:
            scenario: run
        - attach_workspace: {at: ~/workspace} # so we can access the distribution package that was built in build_dist_pkg
