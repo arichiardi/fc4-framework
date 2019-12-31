@@ -315,14 +315,15 @@ jobs:
 
 workflows:
   version: 2
-  tool:
+  lint:
     jobs:
       - lint_prose
       - lint_markdown
       - lint_cljfmt
       - lint_kibit
       - lint_eastwood
-      - build_dist_pkg
+  test:
+    jobs:
       - test:
           name: test_arch
           executor: arch
@@ -334,6 +335,7 @@ workflows:
           executor: macos-mojave
       - test_shutdown_hooks:
           executor: debian-11-browsers
+      - build_dist_pkg
       - test_dist_pkg:
           requires: [build_dist_pkg]
           name: test_dist_pkg_deb_11
