@@ -6,6 +6,8 @@
             [cognitect.anomalies     :as anom]
             [expound.alpha           :as expound :refer [expound-str]]
             [fc4.dsl.model           :as m]
+            [fc4.dsl.style          :as st]
+            [fc4.dsl.view            :as v]
             [fc4.io.yaml             :as ioy :refer [yaml-files]]
             [fc4.spec                :as fs]
             [fc4.util                :as u   :refer [fault]]
@@ -87,6 +89,32 @@
   :args (s/cat :root-path ::fs/dir-path)
   :ret  (s/or :success ::f/model
               :failure ::error))
+
+(defn read-view
+  [file-path]
+  (-> (slurp file-path)
+      (split-file)
+      (get ::fy/main)
+      (v/parse-file)
+      (val-or-error ::f/view)))
+
+(s/fdef read-view
+  :args (s/cat :file-path ::fs/file-path-str)
+  :ret  (s/or :success ::f/view
+              :error   ::error))
+
+(defn read-styles
+  [file-path]
+  (-> (slurp file-path)
+      (split-file)
+      (get ::fy/main)
+      (st/parse-file)
+      (val-or-error ::f/styles)))
+
+(s/fdef read-styles
+  :args (s/cat :file-path ::fs/file-path-str)
+  :ret  (s/or :success ::f/styles
+              :error   ::error))
 
 (comment
   (->> "test/data/model (valid)/users"

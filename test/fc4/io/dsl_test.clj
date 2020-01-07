@@ -44,3 +44,33 @@
     (testing "supplied root path is to a file"
       (is (thrown-with-msg? RuntimeException #"not a dir"
                             (dsl/read-model "test/data/models/valid/a/flat/analyst.yaml"))))))
+
+(deftest read-view
+  (testing "happy path"
+    (is (s/valid? ::f/view
+                  (dsl/read-view "test/data/views/middle (valid).yaml"))))
+
+  (testing "sad path:"
+    (testing "file on disk contains invalid data as per the specs"
+      (let [result (dsl/read-view "test/data/views/middle (invalid).yaml")]
+        (is (not (s/valid? ::f/view result)))
+        (is (s/valid? ::dsl/error result))))
+
+    (testing "file does not exist"
+      (is (thrown-with-msg? FileNotFoundException #"foo"
+                            (dsl/read-view "foo"))))))
+
+(deftest read-styles
+  (testing "happy path"
+    (is (s/valid? ::f/styles
+                  (dsl/read-styles "test/data/styles (valid).yaml"))))
+
+  (testing "sad path:"
+    (testing "file on disk contains invalid data as per the specs"
+      (let [result (dsl/read-styles "test/data/styles (invalid).yaml")]
+        (is (not (s/valid? ::f/styles result)))
+        (is (s/valid? ::dsl/error result))))
+
+    (testing "file does not exist"
+      (is (thrown-with-msg? FileNotFoundException #"foo"
+                            (dsl/read-styles "foo"))))))
