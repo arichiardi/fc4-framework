@@ -17,7 +17,7 @@
 (defn- read-model-files
   "Recursively find, read, and parse YAML files under a directory tree. If a
   file contains “front matter” then only the main document is parsed. Performs
-  very minimal validation. Returns a map of file-path-str to value-or-err-msg-str."
+  very minimal validation. Returns a map of file-path-str to value-or-anomaly."
   [root-path]
   (reduce
    (fn [results path]
@@ -29,7 +29,7 @@
 
 (s/fdef read-model-files
   :args (s/cat :root-path ::fs/dir-path)
-  :ret  (s/map-of ::fs/file-path-str ::m/parse-file-result
+  :ret  (s/map-of ::fs/file-path-str ::m/parse-result
                   :gen-max 2))
 
 (defn uber-error-message
