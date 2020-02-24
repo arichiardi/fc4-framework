@@ -3,7 +3,7 @@
   (:gen-class)
   (:require [clj-yaml.core :refer [parse-string]]
             [clojure.pprint :refer [pprint]]
-            [clojure.set :refer [subset?]]
+            [clojure.set :refer [intersection subset?]]
             [clojure.string :as str :refer [join lower-case split trim]]
             [clojure.tools.cli :refer [parse-opts]]
             [fc4.io.cli.util :as cu :refer [beep exit fail]]
@@ -18,7 +18,14 @@
             [fc4.yaml :as fy :refer [assemble split-file]])
   (:import [java.nio.charset Charset]))
 
-(def options-spec
+(def general-options-spec
+  [["-h" "--help" "Prints the synopsis and a list of the most commonly used commands and exits. Other options are ignored."]
+   [nil  "--debug" "For use by developers working on fc4 (the tool)."]])
+
+(def old-world-options-spec
+  "This tool is mostly a wrapper for Structurizr Express (SE). However, in June 2020 SE will be
+  decommissioned, so this tool will be evolving to have its own data structures, DSL, and rendering.
+  These options relate to the features that relate to SE diagrams."
   [["-f" "--format" (str "Rewrites diagram YAML files, reformatting the YAML to improve readability"
                          " and diffability.")]
    ["-s" "--snap" "Rewrites diagram YAML files, snapping elements to a grid and aligning elements."]
@@ -35,9 +42,22 @@
                     (set))
     :validate [#(subset? % #{:png :svg}) "Supported formats are 'png' and 'svg'."]]
    ["-w" "--watch" (str "Watches the diagrams in/under the specified paths and processes them (as"
-                        " per the options above) when they change.")]
-   ["-h" "--help" "Prints the synopsis and a list of the most commonly used commands and exits. Other options are ignored."]
-   [nil  "--debug" "For use by developers working on fc4 (the tool)."]])
+                        " per the options above) when they change.")]])
+
+(def new-world-options-spec
+  "For features that relate to our new DSL."
+  [; It might be helpful to add a default path for --model at some point, such as ./model, but I’m
+   ; holding off on that now for various reasons, one of which is that that would make it harder to
+   ; detect the mixing of old-world and new-world options.
+   ["-m" "--model PATH" "The path to the directory containing the model."]
+   ["-v" "--validate"   "Validate the model."]])
+
+(def options-spec (concat general-options-spec old-world-options-spec new-world-options-spec))
+
+(def old-vs-new-options
+  "Used to detect the mixing of old-world and new-world options (an error condition)."
+  {:old #{:format :snap :render :output-formats :watch}
+   :new #{:model :validate}})
 
 (def legacy-subcommand->new-equivalent
   ; This is missing `export` but I’m 99.9% sure that no one was using that. I certainly wasn’t.
@@ -78,9 +98,12 @@
   NB: exit and fail usually call System/exit but their normal behaviors can be overridden by
   changing the contents of the atoms in exit-on-exit? and exit-on-fail?"
   [{:keys [arguments summary errors]
-    {:keys [format snap render help output-formats]} :options}]
+    {:keys [format snap render help output-formats]} :options :as options}]
   (let [; Normalize the first arg so we can check whether it’s a legacy subcommand.
-        first-arg (some-> arguments first lower-case)]
+        first-arg (some-> arguments first lower-case)
+        opts-set (set options)
+        old-world? (seq (intersection opts-set (:old old-vs-new-options)))
+        new-world? (seq (intersection opts-set (:new old-vs-new-options)))]
     (cond help
           (exit 0 (usage-message summary))
 
