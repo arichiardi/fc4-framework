@@ -83,6 +83,10 @@
                 ["edit" "."] 1 ; legacy command
                 ["format" "."] 1 ; legacy command
                 ["render" "."] 1 ; legacy command
+                ["--validate" "-f"] 1 ; mixes old-world and new-world
+                ["-m" "-r"] 1 ; mixes old-world and new-world (we’re not yet able to render new-world views)
+                ["-m" "-f"] 1 ; mixes old-world and new-world
+                ["-s" "--validage"]  1 ; mixes old-world and new-world
                 }
                :stderr-must-include
                {["-f"] "At least one path MUST be specified"

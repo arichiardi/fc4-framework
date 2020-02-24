@@ -50,7 +50,9 @@
    ; holding off on that now for various reasons, one of which is that that would make it harder to
    ; detect the mixing of old-world and new-world options.
    ["-m" "--model PATH" "The path to the directory containing the model."]
-   ["-v" "--validate"   "Validate the model."]])
+   ; Not using -v for --validate right now because we might want to use -v as a shorthand for
+   ; --view or --views once we introduce support for rendering and validating views.
+   [nil "--validate"   "Validate the model. The model path must be supplied via -m/--model"]])
 
 (def options-spec (concat general-options-spec old-world-options-spec new-world-options-spec))
 
@@ -109,6 +111,9 @@
 
           errors
           (fail (usage-message summary "Errors:\n  " (join "\n  " errors)))
+
+          (and old-world? new-world?)
+          (fail "-v/--validate and -m/--model may not be used with any other feature options")
 
           (contains? legacy-subcommand->new-equivalent first-arg)
           (fail (clojure.core/format legacy-message
