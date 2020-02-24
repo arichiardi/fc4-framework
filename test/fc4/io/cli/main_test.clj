@@ -68,7 +68,10 @@
                 ["-r" "--output-formats=png,svg" "."]
                 ["-r" "--output-formats=svg+png" "."]
                 ["-r" "--output-formats=svg,png" "."]
-                ["-fsrw" "."]]
+                ["-fsrw" "."]
+                ["--model" "." "--validate"]
+                ["-m" "." "--validate"]
+                ["--validate" "-m" "."]]
                :throw ; because of our reset! calls above, the function will throw rather than exit
                {["--help"] 0 ; user asks for help
                 [] 1 ; no args whatsoever
@@ -98,7 +101,9 @@
                 ["--help"] #"(?ms)Usage.+Options.+Full documentation"
                 ["edit" "."] "subcommand `edit` is no longer supported"
                 ["format" "."] "subcommand `format` is no longer supported"
-                ["render" "."] "subcommand `render` is no longer supported"}}]
+                ["render" "."] "subcommand `render` is no longer supported"
+                ["--validate"] "--validate requires -m/--model"
+                ["--model" "."] "--validate requires -m/--model and vice-versa"}}]
     (doseq [opts (cases :no-throw)]
       (is (nil? (ff opts))))
     (doseq [[opts expected-exit] (cases :throw)]

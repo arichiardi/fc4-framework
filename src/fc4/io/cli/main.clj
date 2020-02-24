@@ -100,7 +100,7 @@
   NB: exit and fail usually call System/exit but their normal behaviors can be overridden by
   changing the contents of the atoms in exit-on-exit? and exit-on-fail?"
   [{:keys [arguments summary errors]
-    {:keys [format snap render help output-formats]} :options :as options}]
+    {:keys [format snap render help output-formats model validate]} :options :as options}]
   (let [; Normalize the first arg so we can check whether it’s a legacy subcommand.
         first-arg (some-> arguments first lower-case)
         opts-set (set options)
@@ -112,24 +112,28 @@
           errors
           (fail (usage-message summary "Errors:\n  " (join "\n  " errors)))
 
-          (and old-world? new-world?)
-          (fail "-v/--validate and -m/--model may not be used with any other feature options")
+          (and new-world? (or (not model) (not validate)))
+          (fail (usage-message summary "--validate requires -m/--model and vice-versa"))
 
-          (contains? legacy-subcommand->new-equivalent first-arg)
-          (fail (clojure.core/format legacy-message
-                                     first-arg
-                                     (legacy-subcommand->new-equivalent first-arg)))
+          old-world?
+          (cond new-world?
+                (fail "-v/--validate and -m/--model may not be used with any other feature options")
 
-          (not (or format snap render))
-          (fail (usage-message summary (str "NB: At least one of -f, -s, or -r (or their"
-                                            " full-length equivalents) MUST be specified")))
+                (contains? legacy-subcommand->new-equivalent first-arg)
+                (fail (clojure.core/format legacy-message
+                                           first-arg
+                                           (legacy-subcommand->new-equivalent first-arg)))
 
-          (and output-formats (not render))
-          (fail (usage-message (str "-o/--output-formats is allowed only when -r/--render is"
-                                    " specified")))
+                (not (or format snap render))
+                (fail (usage-message summary (str "NB: At least one of -f, -s, or -r (or their"
+                                                  " full-length equivalents) MUST be specified")))
 
-          (empty? arguments)
-          (fail (usage-message summary "NB: At least one path MUST be specified")))))
+                (and output-formats (not render))
+                (fail (usage-message (str "-o/--output-formats is allowed only when -r/--render is"
+                                          " specified")))
+
+                (empty? arguments)
+                (fail (usage-message summary "NB: At least one path MUST be specified"))))))
 
 (defn- with-msg [verb f & args]
   (print-now " " verb "...")
