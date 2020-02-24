@@ -89,7 +89,7 @@
                 ["--validate" "-f"] 1 ; mixes old-world and new-world
                 ["-m" "-r"] 1 ; mixes old-world and new-world (we’re not yet able to render new-world views)
                 ["-m" "-f"] 1 ; mixes old-world and new-world
-                ["-s" "--validage"]  1 ; mixes old-world and new-world
+                ["-s" "--validate"]  1 ; mixes old-world and new-world
                 }
                :stderr-must-include
                {["-f"] "At least one path MUST be specified"
@@ -105,14 +105,19 @@
                 ["--validate"] "--validate requires -m/--model"
                 ["--model" "."] "--validate requires -m/--model and vice-versa"}}]
     (doseq [opts (cases :no-throw)]
-      (is (nil? (ff opts))))
+      (is (nil? (ff opts))
+          (str "Failure testing case " opts)))
+
     (doseq [[opts expected-exit] (cases :throw)]
       (with-err-str ; suppress error messages
-        (is (thrown? Exception (ff opts))))
+        (is (thrown? Exception (ff opts))
+            (str "Failure testing case " opts)))
       (with-err-str ; suppress error messages
-        (let [e (try (ff opts) (catch Exception e (str e)))
-              actual-exit (Integer/parseInt (str (last e)))]
-          (is (= expected-exit actual-exit)))))
+        (let [e (try (ff opts) (catch Exception e (str e)))]
+          (is (= expected-exit
+                 (Integer/parseInt (str (last e))))
+              (str "Failure testing case " opts)))))
+
     (doseq [[opts msg] (cases :stderr-must-include)]
       (let [stderr (with-err-str
                      (try (ff opts) (catch Exception e (str e))))]

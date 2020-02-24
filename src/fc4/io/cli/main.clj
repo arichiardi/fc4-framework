@@ -100,10 +100,10 @@
   NB: exit and fail usually call System/exit but their normal behaviors can be overridden by
   changing the contents of the atoms in exit-on-exit? and exit-on-fail?"
   [{:keys [arguments summary errors]
-    {:keys [format snap render help output-formats model validate]} :options :as options}]
+    {:keys [format snap render help output-formats model validate] :as options} :options}]
   (let [; Normalize the first arg so we can check whether it’s a legacy subcommand.
         first-arg (some-> arguments first lower-case)
-        opts-set (set options)
+        opts-set (set (keys options))
         old-world? (seq (intersection opts-set (:old old-vs-new-options)))
         new-world? (seq (intersection opts-set (:new old-vs-new-options)))]
     (cond help
@@ -112,19 +112,22 @@
           errors
           (fail (usage-message summary "Errors:\n  " (join "\n  " errors)))
 
+          (and old-world? new-world?)
+          (fail "-v/--validate and -m/--model may not be used with any other feature options")
+
           (and new-world? (or (not model) (not validate)))
           (fail (usage-message summary "--validate requires -m/--model and vice-versa"))
 
+          (contains? legacy-subcommand->new-equivalent first-arg)
+          (fail (clojure.core/format legacy-message
+                                     first-arg
+                                     (legacy-subcommand->new-equivalent first-arg)))
+
+          (empty? options)
+          (fail (usage-message summary))
+
           old-world?
-          (cond new-world?
-                (fail "-v/--validate and -m/--model may not be used with any other feature options")
-
-                (contains? legacy-subcommand->new-equivalent first-arg)
-                (fail (clojure.core/format legacy-message
-                                           first-arg
-                                           (legacy-subcommand->new-equivalent first-arg)))
-
-                (not (or format snap render))
+          (cond (not (or format snap render))
                 (fail (usage-message summary (str "NB: At least one of -f, -s, or -r (or their"
                                                   " full-length equivalents) MUST be specified")))
 
