@@ -100,18 +100,24 @@
 
 (defn -main
   [& args]
-  (let [{{:keys [debug render]} :options :as opts} (parse-opts args options-spec)]
+  (let [{{:keys [debug render] :as opts} :options :as parsed} (parse-opts args options-spec)
+        world (which-world? opts)]
     (when debug
       (reset! debug? true)
       (println "*DEBUG*\nParsed Command Line:")
-      (pprint opts))
+      (pprint parsed))
     ;; These two check- fns will exit or throw (depending on debug mode) if they find issues.
     (check-charset)
-    (check-opts opts)
-    (if render
-      (with-open [renderer (ser/make-renderer)]
-        (old-world/start renderer opts))
-      (old-world/start nil opts)))
+    (check-opts parsed)
+    (cond (and (= world :old) render)
+          (with-open [renderer (ser/make-renderer)]
+            (old-world/start renderer parsed))
+
+          (and (= world :old) (not render))
+          (old-world/start nil parsed)
+
+          :else
+          (throw (ex-info "WTF" {:parsed parsed :world world}))))
   ;; Often, when the main method invoked via the `java` command at the command-line exits,
   ;; the JVM exits as well. That’s not the case here, though, so we call exit to shut down the
   ;; JVM (and the tool with it).
