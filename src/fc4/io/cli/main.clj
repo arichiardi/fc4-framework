@@ -42,7 +42,7 @@
          (str "\n\n"
               (join " " specific-messages)))
        "\n\n"
-       "Full documentation is at https://fundingcircle.github.io/fc4-framework/tool/"))
+       "Full documentation is at https://fundingcircle.github.io/fc4-framework/"))
 
 (defn- check-charset
   []
