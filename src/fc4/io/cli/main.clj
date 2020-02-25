@@ -50,6 +50,14 @@
     (when (not= default-charset "UTF-8")
       (fail "JVM default charset is" default-charset "but must be UTF-8."))))
 
+(defn- which-world?
+  [options]
+  (let [opts-set (set (keys options))]
+    (or (and (seq (intersection opts-set (:old old-vs-new-options)))
+             :old)
+        (and (seq (intersection opts-set (:new old-vs-new-options)))
+             :new))))
+
 (defn- check-opts
   "Checks the command-line arguments and options for correctness and calls either exit or fail if
   any problems are found OR if -h/--help was specified.
@@ -61,9 +69,9 @@
     :as parsed-opts}]
   (let [; Normalize the first arg so we can check whether it’s a legacy subcommand.
         first-arg (some-> arguments first lower-case)
-        opts-set (set (keys options))
-        old-world? (seq (intersection opts-set (:old old-vs-new-options)))
-        new-world? (seq (intersection opts-set (:new old-vs-new-options)))]
+        world (which-world? options)
+        old-world? (= world :old)
+        new-world? (= world :new)]
     (cond help
           (exit 0 (usage-message summary))
 
@@ -83,6 +91,9 @@
 
           (empty? options)
           (fail (usage-message summary))
+
+          (and (not old-world?) (not new-world?))
+          (fail (usage-message summary) "You must specify a major feature option.")
 
           old-world?
           (old-world/check-opts parsed-opts (fn [msg] (fail (usage-message summary msg)))))))
