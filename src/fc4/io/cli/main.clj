@@ -35,6 +35,14 @@
   {:old #{:format :snap :render :output-formats :watch}
    :new #{:model :validate}})
 
+(defn- old-world?
+  [opt-keys]
+  (boolean (seq (intersection opt-keys (:old old-vs-new-options)))))
+
+(defn- new-world?
+  [opt-keys]
+  (boolean (seq (intersection opt-keys (:new old-vs-new-options)))))
+
 (defn- usage-message [summary & specific-messages]
   (str "Usage: fc4 OPTIONS PATH [PATH...]\n\nOptions:\n"
        summary
@@ -50,14 +58,6 @@
     (when (not= default-charset "UTF-8")
       (fail "JVM default charset is" default-charset "but must be UTF-8."))))
 
-(defn- which-world?
-  [options]
-  (let [opts-set (set (keys options))]
-    (or (and (seq (intersection opts-set (:old old-vs-new-options)))
-             :old)
-        (and (seq (intersection opts-set (:new old-vs-new-options)))
-             :new))))
-
 (defn- check-opts
   "Checks the command-line arguments and options for correctness and calls either exit or fail if
   any problems are found OR if -h/--help was specified.
@@ -69,20 +69,20 @@
     :as parsed-opts}]
   (let [; Normalize the first arg so we can check whether it’s a legacy subcommand.
         first-arg (some-> arguments first lower-case)
-        world (which-world? options)
-        old-world? (= world :old)
-        new-world? (= world :new)]
+        opt-keys (set (keys options))
+        old-world (old-world? opt-keys)
+        new-world (new-world? opt-keys)]
     (cond help
           (exit 0 (usage-message summary))
 
           errors
           (fail (usage-message summary "Errors:\n  " (join "\n  " errors)))
 
-          (and old-world? new-world?)
-          (fail "-v/--validate and -m/--model may not be used with any other feature options")
+          (and old-world new-world)
+          (fail "NB: -v/--validate and -m/--model may not be used with any other feature options")
 
-          (and new-world? (or (not model) (not validate)))
-          (fail (usage-message summary "--validate requires -m/--model and vice-versa"))
+          (and new-world (or (not model) (not validate)))
+          (fail (usage-message summary "NB: --validate requires -m/--model and vice-versa"))
 
           (contains? old-world/legacy-subcommand->new-equivalent first-arg)
           (fail (clojure.core/format old-world/legacy-message
@@ -92,16 +92,16 @@
           (empty? options)
           (fail (usage-message summary))
 
-          (and (not old-world?) (not new-world?))
-          (fail (usage-message summary) "You must specify a major feature option.")
+          (and (not old-world) (not new-world))
+          (fail (usage-message summary) "NB: You must specify a major feature option.")
 
-          old-world?
-          (old-world/check-opts parsed-opts (fn [msg] (fail (usage-message summary msg)))))))
+          old-world
+          (old-world/check-opts parsed-opts (fn [msg] (fail (usage-message summary) msg))))))
 
 (defn -main
   [& args]
   (let [{{:keys [debug render] :as opts} :options :as parsed} (parse-opts args options-spec)
-        world (which-world? opts)]
+        opt-keys (set (keys opts))]
     (when debug
       (reset! debug? true)
       (println "*DEBUG*\nParsed Command Line:")
@@ -109,15 +109,15 @@
     ;; These two check- fns will exit or throw (depending on debug mode) if they find issues.
     (check-charset)
     (check-opts parsed)
-    (cond (and (= world :old) render)
-          (with-open [renderer (ser/make-renderer)]
-            (old-world/start renderer parsed))
+    (cond
+      (old-world? opt-keys) (if render
+                              (with-open [renderer (ser/make-renderer)]
+                                (old-world/start renderer parsed))
+                              (old-world/start nil parsed))
 
-          (and (= world :old) (not render))
-          (old-world/start nil parsed)
+      (new-world? opt-keys) (println "COMING SOON")
 
-          :else
-          (throw (ex-info "WTF" {:parsed parsed :world world}))))
+      :else (throw (ex-info "Options not recognized" {:parsed-opts parsed}))))
   ;; Often, when the main method invoked via the `java` command at the command-line exits,
   ;; the JVM exits as well. That’s not the case here, though, so we call exit to shut down the
   ;; JVM (and the tool with it).

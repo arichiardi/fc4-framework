@@ -103,7 +103,10 @@
                 ["format" "."] "subcommand `format` is no longer supported"
                 ["render" "."] "subcommand `render` is no longer supported"
                 ["--validate"] "--validate requires -m/--model"
-                ["--model" "."] "--validate requires -m/--model and vice-versa"}}]
+                ["--model" "."] "--validate requires -m/--model and vice-versa"
+                ["--validate" "--format"] "may not be used with any other feature options"
+                ["--model" "." "--snap"] "may not be used with any other feature options"
+                ["--render" "--validate"] "may not be used with any other feature options"}}]
     (doseq [opts (cases :no-throw)]
       (is (nil? (ff opts))
           (str "Failure testing case " opts)))
