@@ -5,10 +5,13 @@
             [clojure.set :refer [intersection]]
             [clojure.string :as str :refer [join lower-case]]
             [clojure.tools.cli :refer [parse-opts]]
+            [cognitect.anomalies :as anom]
             [fc4.integrations.structurizr.express.renderer :as ser]
             [fc4.io.cli.old-world :as old-world]
             [fc4.io.cli.util :as cu :refer [exit fail]]
-            [fc4.io.util :refer [debug?]])
+            [fc4.io.dsl :refer [read-model]]
+            [fc4.io.util :as iu :refer [debug?]]
+            [fc4.util :refer [anom?]])
   (:import [java.nio.charset Charset]))
 
 (def general-options-spec
@@ -115,7 +118,13 @@
                                 (old-world/start renderer parsed))
                               (old-world/start nil parsed))
 
-      (new-world? opt-keys) (println "COMING SOON")
+      (new-world? opt-keys)
+      ;; If we made it here, it’s time to validate the model -- that’s the only new-world feature at
+      ;; this moment.
+      (let [result (read-model (:model opts))]
+        (if (anom? result)
+          (fail (::anom/message result) result)
+          (iu/debug "Valid!")))
 
       :else (throw (ex-info "Options not recognized" {:parsed-opts parsed}))))
   ;; Often, when the main method invoked via the `java` command at the command-line exits,
